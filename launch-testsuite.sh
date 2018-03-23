@@ -21,3 +21,6 @@ ssh-keygen -R $CTRL_FQDN
 ssh-keyscan $CTRL_FQDN >> ~/.ssh/known_hosts
 
 ssh root@$CTRL_FQDN screen -d -m run-testsuite
+
+echo "Testsuite run is started in a screen session."
+echo "Run 'ssh -t root@$CTRL_FQDN screen -r' to attach to it."
