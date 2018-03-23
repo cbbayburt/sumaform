@@ -24,4 +24,4 @@ done
 
 # TODO: Better argument parsing and recreate all
 # (when no resource names given) option
-# recreate [-u|--undo] [-f|--filter FILTER] [resource [...]]
+# recreate [-u|--undo] [-f|--filter FILTER] [-s|--state TFSTATE] [resource [...]]
