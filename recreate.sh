@@ -12,7 +12,7 @@ fi
 if [ -z $RESOURCES ]
 then
 # Only test:    RESOURCES=$(terraform state list | grep "module\..*\-test\." | cut -d. -f 2,4 | sort -u)
-    RESOURCES=$(terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2,4)
+    RESOURCES=$(terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2,4 | sed s/.domain// )
 fi
 
 for RES in $RESOURCES
