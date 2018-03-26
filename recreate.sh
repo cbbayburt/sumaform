@@ -1,27 +1,66 @@
 #!/bin/bash
+#
+# A utility script to taint/untaint arbitrary resources in terraform.
+#
+# Author: Can Bayburt <cbbayburt@suse.com>
+#
+# Usage:
+#   recreate [-u|--undo] [-f|--filter <filter>] [-s|--state <tfstate file>] [<resource>...]
 
-if [ "$1" = "-u" -o "$1" = "--undo" ]
+RESOURCES=()
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -u|--undo)
+            UNDO=1
+            shift
+            ;;
+        -f|--filter)
+            FILTER="$2"
+            shift
+            shift
+            ;;
+        -s|--state)
+            STATEPATH="$2"
+            shift
+            shift
+            ;;
+        *)
+            RESOURCES+=("$1")
+            shift
+            ;;
+    esac
+done
+set -- "${RESOURCES[@]}"
+
+# Process undo option
+if [ -n "$UNDO" ]
 then
     CMD=untaint
-    RESOURCES=$2
 else
     CMD=taint
-    RESOURCES=$1
 fi
 
-if [ -z $RESOURCES ]
+# Process state option
+if [ -n "$STATEPATH" ]
 then
-# Only test:    RESOURCES=$(terraform state list | grep "module\..*\-test\." | cut -d. -f 2,4 | sort -u)
-    RESOURCES=$(terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2,4 | sed s/.domain// )
+    STATEOPT="-state=$STATEPATH"
 fi
 
-for RES in $RESOURCES
+# Process resource array
+# Probe all resources if the array is empty
+if [ ${#RESOURCES[@]} -eq 0 ]
+then
+    RESOURCES=($(terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2,4 | sed s/.domain// ))
+fi
+
+# Perform taint/untaint
+for RES in ${RESOURCES[@]}
 do
-    terraform $CMD -module $RES libvirt_domain.domain && \
-    terraform $CMD -module $RES libvirt_volume.main_disk
+    if [[ $RES = *"$FILTER"* ]]
+    then
+        terraform $CMD -module $RES $STATEOPT libvirt_domain.domain && \
+        terraform $CMD -module $RES $STATEOPT libvirt_volume.main_disk
+    fi
 done
-
-
-# TODO: Better argument parsing and recreate all
-# (when no resource names given) option
-# recreate [-u|--undo] [-f|--filter FILTER] [-s|--state TFSTATE] [resource [...]]
