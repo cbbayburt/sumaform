@@ -1,19 +1,57 @@
 #!/bin/bash
+#
+# A utility script to create/reset required resources
+# and launch the testsuite afterwards.
+#
+# Author: Can Bayburt <cbbayburt@suse.com>
+#
+# Usage:
+#   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
+#
+# TODO:
+#   - Implement option: --core-only
+#   - Break if a command fails
 
-# TODO: Add state file path option
-# TODO: Add option: --core-only
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -c|--core-only)
+            CORE_ONLY=1
+            shift
+            ;;
+        -s|--state)
+            STATEPATH="$2"
+            shift
+            shift
+            ;;
+    esac
+done
 
-if [ -z "$(terraform show | grep module\\.)" ]
+if [ -n "$STATEPATH" ]
 then
-    terraform init
+    TFSTATEARG="-state=$STATEPATH"
+    STATEARG="-s $STATEPATH"
+    STATEDIR=$(dirname $STATEPATH)
+fi
+
+# Initialize terraform if running for the first time
+if [ ! -f $STATEPATH ]
+then
+    terraform init $STATEDIR
 else
-    ./recreate.sh
+    if [ -z "$(terraform show $STATEPATH | grep module\\.)" ]
+    then
+        terraform init $STATEDIR
+    else
+        ./recreate.sh $STATEARG
+    fi
 fi
 
 terraform get
-terraform apply
+terraform apply $TFSTATEARG
 
-CTRL_NAME=$(terraform state show $(terraform state list | grep controller.libvirt_domain) |\
+CTRL_NAME=$(terraform state show $TFSTATEARG $(terraform state list $TFSTATEARG | grep controller.libvirt_domain) |\
     grep ^name | sed -r s/\\s+//g | cut -d= -f2)
 CTRL_FQDN=$CTRL_NAME.tf.local
 
