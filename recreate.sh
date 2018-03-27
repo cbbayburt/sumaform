@@ -5,13 +5,18 @@
 # Author: Can Bayburt <cbbayburt@suse.com>
 #
 # Usage:
-#   recreate [-u|--undo] [-f|--filter <filter>] [-s|--state <tfstate file>] [<resource>...]
+#   recreate [-d|--destroy] [-u|--undo] [-f|--filter <filter>]
+#       [-s|--state <tfstate file>] [--force-destroy] [<module>...]
 
-RESOURCES=()
+MODULES=()
 while [[ $# -gt 0 ]]
 do
     key="$1"
     case $key in
+        -d|--destroy)
+            DESTROY=1
+            shift
+            ;;
         -u|--undo)
             UNDO=1
             shift
@@ -26,13 +31,17 @@ do
             shift
             shift
             ;;
+        --force-destroy)
+            FORCEOPT="-force"
+            shift
+            ;;
         *)
-            RESOURCES+=("$1")
+            MODULES+=("$1")
             shift
             ;;
     esac
 done
-set -- "${RESOURCES[@]}"
+set -- "${MODULES[@]}"
 
 # Process undo option
 if [ -n "$UNDO" ]
@@ -48,19 +57,37 @@ then
     STATEOPT="-state=$STATEPATH"
 fi
 
-# Process resource array
+# Process module array
 # Probe all resources if the array is empty
-if [ ${#RESOURCES[@]} -eq 0 ]
+if [ ${#MODULES[@]} -eq 0 ]
 then
-    RESOURCES=($(terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2,4 | sed s/.domain// ))
+    MODULES=($( terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2 ))
+fi
+
+# Perform destroy
+if [ -n "$DESTROY" ]
+then
+    DESTROY_TARGETS=()
+    for MOD in ${MODULES[@]}
+    do
+        if [[ $MOD = *"$FILTER"* ]]
+        then
+            DESTROY_TARGETS+=("-target module.$MOD")
+        fi
+    done
+
+    terraform destroy ${DESTROY_TARGETS[@]} $STATEOPT $FORCEOPT
+    exit
 fi
 
 # Perform taint/untaint
-for RES in ${RESOURCES[@]}
+for MOD in ${MODULES[@]}
 do
-    if [[ $RES = *"$FILTER"* ]]
+    if [[ $MOD = *"$FILTER"* ]]
     then
-        terraform $CMD -module $RES $STATEOPT libvirt_domain.domain && \
-        terraform $CMD -module $RES $STATEOPT libvirt_volume.main_disk
+        MODNAME=$(terraform state list module.$MOD | head -n1 | cut -d. -f2,4 | sed s/\.domain//)
+        echo $MODNAME
+        terraform $CMD -module $MODNAME $STATEOPT libvirt_domain.domain && \
+        terraform $CMD -module $MODNAME $STATEOPT libvirt_volume.main_disk
     fi
 done
