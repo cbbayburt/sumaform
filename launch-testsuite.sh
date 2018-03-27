@@ -79,8 +79,7 @@ then
     # Deploy java
     CURDIR=$(pwd)
     cd $SPACEWALKDIR/java
-    ant resolve-ivy
-    ant -f manager-build.xml -Ddeploy.host=$SRV_FQDN refresh-branding-jar deploy
+    ant -f manager-build.xml -Dprecompiled -Ddeploy.host=$SRV_FQDN refresh-branding-jar deploy
 
     sleep 120
 
