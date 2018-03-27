@@ -6,7 +6,8 @@
 # Author: Can Bayburt <cbbayburt@suse.com>
 #
 # Usage:
-#   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>] [--spacewalk-dir <spacewalk directory>]
+#   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
+#       [--spacewalk-dir <spacewalk directory>] [--keep]
 #
 # TODO:
 #   - Break if a command fails
@@ -27,6 +28,10 @@ do
         --spacewalk-dir)
             SPACEWALKDIR="$2"
             shift
+            shift
+            ;;
+        --keep)
+            KEEP=1
             shift
             ;;
     esac
@@ -91,7 +96,7 @@ ssh -t root@$CTRL_FQDN run-testsuite
 scp $CTRL_FQDN:/root/spacewalk/testsuite/output.html ./output-$(date +%Y-%m-%d-%H-%M-%S).html
 scp $CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 ./spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
 
-## Alternatively, run in a screen session:
-# ssh root@$CTRL_FQDN screen -d -m run-testsuite
-# echo "Testsuite run is started in a screen session."
-# echo "Run 'ssh -t root@$CTRL_FQDN screen -r' to attach to it."
+if [ -z "$KEEP" ]
+then
+    ./recreate.sh $STATEARG -d --force-destroy
+fi
