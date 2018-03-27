@@ -9,7 +9,6 @@
 #   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
 #
 # TODO:
-#   - Implement option: --core-only
 #   - Break if a command fails
 
 while [[ $# -gt 0 ]]
@@ -57,6 +56,11 @@ CTRL_FQDN=$CTRL_NAME.tf.local
 
 ssh-keygen -R $CTRL_FQDN
 ssh-keyscan $CTRL_FQDN >> ~/.ssh/known_hosts
+
+if [ -n "$CORE_ONLY" ]
+then
+    ssh root@$CTRL_FQDN sed -i /core_.*\.feature/\!d spacewalk/testsuite/run_sets/testsuite.yaml
+fi
 
 ssh root@$CTRL_FQDN screen -d -m run-testsuite
 
