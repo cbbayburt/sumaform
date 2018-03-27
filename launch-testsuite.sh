@@ -103,8 +103,8 @@ fi
 ssh -t root@$CTRL_FQDN run-testsuite
 
 # Download output files
-scp $CTRL_FQDN:/root/spacewalk/testsuite/output.html $OUTPUTDIR/output-$(date +%Y-%m-%d-%H-%M-%S).html
-scp $CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 $OUTPUTDIR/spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
+scp root@$CTRL_FQDN:/root/spacewalk/testsuite/output.html $OUTPUTDIR/output-$(date +%Y-%m-%d-%H-%M-%S).html
+scp root@$CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 $OUTPUTDIR/spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
 
 # Cleanup: destroy resources
 if [ -z "$KEEP" ]
