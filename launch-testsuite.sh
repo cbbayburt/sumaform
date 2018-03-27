@@ -8,9 +8,12 @@
 # Usage:
 #   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
 #       [--spacewalk-dir <spacewalk directory>] [--keep]
+#       [-o|--output-dir <output directory>]
 #
 # TODO:
 #   - Break if a command fails
+
+OUTPUTDIR=.
 
 while [[ $# -gt 0 ]]
 do
@@ -27,6 +30,11 @@ do
             ;;
         --spacewalk-dir)
             SPACEWALKDIR="$2"
+            shift
+            shift
+            ;;
+        -o|--output-dir)
+            OUTPUTDIR="$2"
             shift
             shift
             ;;
@@ -86,16 +94,20 @@ CTRL_FQDN=$CTRL_NAME.tf.local
 ssh-keygen -R $CTRL_FQDN
 ssh-keyscan $CTRL_FQDN >> ~/.ssh/known_hosts
 
+# Remove non-core features from the run set
 if [ -n "$CORE_ONLY" ]
 then
     ssh root@$CTRL_FQDN sed -i /core_.*\.feature/\!d spacewalk/testsuite/run_sets/testsuite.yaml
 fi
 
+# Run the testsuite
 ssh -t root@$CTRL_FQDN run-testsuite
 
-scp $CTRL_FQDN:/root/spacewalk/testsuite/output.html ./output-$(date +%Y-%m-%d-%H-%M-%S).html
-scp $CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 ./spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
+# Download output files
+scp $CTRL_FQDN:/root/spacewalk/testsuite/output.html $OUTPUTDIR/output-$(date +%Y-%m-%d-%H-%M-%S).html
+scp $CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 $OUTPUTDIR/spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
 
+# Cleanup: destroy resources
 if [ -z "$KEEP" ]
 then
     ./recreate.sh $STATEARG -d --force-destroy
