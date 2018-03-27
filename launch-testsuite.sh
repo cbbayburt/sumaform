@@ -88,6 +88,9 @@ fi
 
 ssh -t root@$CTRL_FQDN run-testsuite
 
+scp $CTRL_FQDN:/root/spacewalk/testsuite/output.html ./output-$(date +%Y-%m-%d-%H-%M-%S).html
+scp $CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 ./spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
+
 ## Alternatively, run in a screen session:
 # ssh root@$CTRL_FQDN screen -d -m run-testsuite
 # echo "Testsuite run is started in a screen session."
