@@ -61,12 +61,17 @@ fi
 # Probe all resources if the array is empty
 if [ ${#MODULES[@]} -eq 0 ]
 then
-    MODULES=($( terraform state list | grep "^module\..*\.libvirt_domain.domain$" | cut -d. -f2 ))
+    MODULES=($( terraform state list | grep "^module\..*\..*\(domain\)\|\(main_disk\)$" | cut -d. -f2 | sort -u ))
 fi
 
 # Perform destroy
 if [ -n "$DESTROY" ]
 then
+    if [ ${#MODULES[@]} -eq 0 ]
+    then
+        echo "Nothing to destroy." && exit
+    fi
+
     DESTROY_TARGETS=()
     for MOD in ${MODULES[@]}
     do
@@ -85,9 +90,9 @@ for MOD in ${MODULES[@]}
 do
     if [[ $MOD = *"$FILTER"* ]]
     then
-        MODNAME=$(terraform state list module.$MOD | head -n1 | cut -d. -f2,4 | sed s/\.domain//)
+        MODNAME=$(terraform state list module.$MOD | head -n1 | cut -d. -f2,4 | sed -r s/\.\(main_disk\)\|\(domain\)//)
         echo $MODNAME
-        terraform $CMD -module $MODNAME $STATEOPT libvirt_domain.domain && \
+        terraform $CMD -module $MODNAME $STATEOPT libvirt_domain.domain; \
         terraform $CMD -module $MODNAME $STATEOPT libvirt_volume.main_disk
     fi
 done
