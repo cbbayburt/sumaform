@@ -8,7 +8,7 @@
 # Usage:
 #   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
 #       [--spacewalk-dir <spacewalk directory>] [--keep]
-#       [-o|--output-dir <output directory>] [--run-only]
+#       [-o|--output-dir <output directory>]
 #
 # TODO:
 #   - Break if a command fails
@@ -16,15 +16,10 @@
 OUTPUTDIR=.
 
 while [[ $# -gt 0 ]]
-do
-    key="$1"
+do key="$1"
     case $key in
         -c|--core-only)
             CORE_ONLY=1
-            shift
-            ;;
-        --run-only)
-            RUN_ONLY=1
             shift
             ;;
         -s|--state)
@@ -56,25 +51,19 @@ then
     STATEDIR=$(dirname $STATEPATH)
 fi
 
-if [ -z "$RUN_ONLY" ]
+# Initialize terraform if running for the first time
+if [ ! -f $STATEPATH ]
 then
-    # Initialize terraform if running for the first time
-    if [ ! -f $STATEPATH ]
+    terraform init $STATEDIR
+else
+    if [ -z "$(terraform show $STATEPATH | grep module\\.)" ]
     then
         terraform init $STATEDIR
-    else
-        # Taint and recreate resources
-        if [ -z "$(terraform show $STATEPATH | grep module\\.)" ]
-        then
-            terraform init $STATEDIR
-        else
-            ./recreate.sh $STATEARG
-        fi
     fi
-
-    terraform get
-    terraform apply $TFSTATEARG
 fi
+
+terraform get
+terraform apply $TFSTATEARG
 
 if [ -n "$SPACEWALKDIR" ]
 then
@@ -121,4 +110,7 @@ scp root@$CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 $OUTPUTDIR
 if [ -z "$KEEP" ]
 then
     ./recreate.sh $STATEARG -d --force-destroy
+else
+    # Just taint all resources
+    ./recreate.sh $STATEARG
 fi
