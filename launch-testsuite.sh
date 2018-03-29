@@ -89,9 +89,12 @@ fi
 CTRL_NAME=$(terraform state show $TFSTATEARG $(terraform state list $TFSTATEARG | grep controller.libvirt_domain) |\
     grep ^name | sed -r s/\\s+//g | cut -d= -f2)
 CTRL_FQDN=$CTRL_NAME.tf.local
+CTRL_IP=$(getent hosts $CTRL_FQDN | awk '{ print $1 }')
 
 ssh-keygen -R $CTRL_FQDN
+ssh-keygen -R $CTRL_IP
 ssh-keyscan $CTRL_FQDN >> ~/.ssh/known_hosts
+ssh-keyscan $CTRL_IP >> ~/.ssh/known_hosts
 
 # Remove non-core features from the run set
 if [ -n "$CORE_ONLY" ]
