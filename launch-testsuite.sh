@@ -8,7 +8,7 @@
 # Usage:
 #   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
 #       [--spacewalk-dir <spacewalk directory>] [--keep]
-#       [-o|--output-dir <output directory>]
+#       [-o|--output-dir <output directory>] [--run-only]
 #
 # TODO:
 #   - Break if a command fails
@@ -21,6 +21,10 @@ do
     case $key in
         -c|--core-only)
             CORE_ONLY=1
+            shift
+            ;;
+        --run-only)
+            RUN_ONLY=1
             shift
             ;;
         -s|--state)
@@ -52,21 +56,25 @@ then
     STATEDIR=$(dirname $STATEPATH)
 fi
 
-# Initialize terraform if running for the first time
-if [ ! -f $STATEPATH ]
+if [ -z "$RUN_ONLY" ]
 then
-    terraform init $STATEDIR
-else
-    if [ -z "$(terraform show $STATEPATH | grep module\\.)" ]
+    # Initialize terraform if running for the first time
+    if [ ! -f $STATEPATH ]
     then
         terraform init $STATEDIR
     else
-        ./recreate.sh $STATEARG
+        # Taint and recreate resources
+        if [ -z "$(terraform show $STATEPATH | grep module\\.)" ]
+        then
+            terraform init $STATEDIR
+        else
+            ./recreate.sh $STATEARG
+        fi
     fi
-fi
 
-terraform get
-terraform apply $TFSTATEARG
+    terraform get
+    terraform apply $TFSTATEARG
+fi
 
 if [ -n "$SPACEWALKDIR" ]
 then
