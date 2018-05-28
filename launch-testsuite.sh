@@ -67,6 +67,8 @@ terraform apply $TFSTATEARG
 
 if [ -n "$SPACEWALKDIR" ]
 then
+    sleep 10
+
     SRV_NAME=$(terraform state show $TFSTATEARG $(terraform state list $TFSTATEARG | grep suse_manager.libvirt_domain) |\
         grep ^name | sed -r s/\\s+//g | cut -d= -f2)
     SRV_FQDN=$SRV_NAME.tf.local
