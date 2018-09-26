@@ -63,7 +63,7 @@ fi
 # Process state option
 if [ -n "$STATEPATH" ]
 then
-    STATEOPT="-state=$STATEPATH"
+    STATEOPT="-state=$STATEPATH -state-out=$STATEPATH"
 fi
 
 # Process module array

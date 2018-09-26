@@ -58,7 +58,7 @@ done
 
 if [ -n "$STATEPATH" ]
 then
-    TFSTATEARG="-state=$STATEPATH"
+    TFSTATEARG="-state=$STATEPATH -state-out=$STATEPATH"
     STATEARG="-s $STATEPATH"
     STATEDIR=$(dirname $STATEPATH)
 fi
