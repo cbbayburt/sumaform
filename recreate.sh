@@ -1,12 +1,21 @@
 #!/bin/bash
 #
-# A utility script to taint/untaint arbitrary resources in terraform.
-#
 # Author: Can Bayburt <cbbayburt@suse.com>
 #
-# Usage:
-#   recreate [-d|--destroy] [-u|--undo] [-f|--filter <filter>]
-#       [-s|--state <tfstate file>] [--force-destroy] [<module>...]
+#
+# Usage: recreate [OPTION]... [MODULE]...
+#
+# A utility script to taint/untaint/destroy arbitrary resources in terraform.
+# By default, the script operates on every module defined in the state file.
+#
+#   -d, --destroy              destroy the modules completely
+#   -u, --undo                 untaint previously tainted resources
+#   -f, --filter STR           operate only on modules matched by STR
+#   -s, --state FILE           use FILE tfstate file to read from / write to
+#                                (the default is 'terraform.tfstate')
+#       --force-destroy        add '--force' option to Terraform's destroy
+#                                command (only used with -d option)
+#
 
 MODULES=()
 while [[ $# -gt 0 ]]
