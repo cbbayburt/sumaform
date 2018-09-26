@@ -1,14 +1,26 @@
 #!/bin/bash
 #
-# A utility script to create/reset required resources
-# and launch the testsuite afterwards.
-#
 # Author: Can Bayburt <cbbayburt@suse.com>
 #
-# Usage:
-#   launch-testsuite [-c|--core-only] [-s|--state <tfstate file>]
-#       [--spacewalk-dir <spacewalk directory>] [--keep]
-#       [-o|--output-dir <output directory>]
+#
+# Usage: launch-testsuite [OPTION]...
+#
+# A utility script to create/reset required resources and launch the testsuite
+# when the resources are ready. Unless the --keep option is set, all resources
+# are destroyed after the run. Therefore, the script can be run consequently.
+#
+#   -c, --core-only            only run the core features
+#   -s, --state FILE           tfstate file to read from / write to (if the file
+#                                does not exist, a new one will be created)
+#       --spacewalk-dir DIR    compile and deploy the java application in the
+#                                spacewalk repository DIR with ant prior
+#                                to the test run. Useful to test fixes
+#                                on-the-fly
+#       --keep                 just taint and keep the resources instead of
+#                                destroying them after the test run. Useful for
+#                                post-mortem debugging
+#   -o, --output-dir DIR       store the generated Cucumber log files in DIR
+#                                (the default is the current directory)
 #
 # TODO:
 #   - Break if a command fails
