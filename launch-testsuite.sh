@@ -12,10 +12,9 @@
 #   -c, --core-only            only run the core features
 #   -s, --state FILE           tfstate file to read from / write to (if the file
 #                                does not exist, a new one will be created)
-#       --spacewalk-dir DIR    compile and deploy the java application in the
-#                                spacewalk repository DIR with ant prior
-#                                to the test run. Useful to test fixes
-#                                on-the-fly
+#       --spacewalk-dir DIR    deploy the compiled java application in the
+#                                spacewalk repository DIR with ant prior to the
+#                                test run. Useful to test fixes on-the-fly
 #       --keep                 just taint and keep the resources instead of
 #                                destroying them after the test run. Useful for
 #                                post-mortem debugging
