@@ -135,6 +135,14 @@ testsuite_env_vars:
     - group: root
     - mode: 755
 
+controller_toprc:
+  file.managed:
+    - name: /root/.toprc
+    - source: salt://controller/toprc
+    - user: root
+    - group: root
+    - mode: 644
+
 extra_pkgs:
   pkg.installed:
     - pkgs:
