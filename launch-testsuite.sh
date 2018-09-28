@@ -74,7 +74,7 @@ else
 fi
 
 terraform get
-terraform apply $TFSTATEARG
+terraform apply -auto-approve $TFSTATEARG
 
 if [ -n "$SPACEWALKDIR" ]
 then
