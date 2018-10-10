@@ -63,14 +63,16 @@ fi
 # Process state option
 if [ -n "$STATEPATH" ]
 then
-    STATEOPT="-state=$STATEPATH -state-out=$STATEPATH"
+    # State file options for read and write commands
+    STATEOPTW="-state=$STATEPATH -state-out=$STATEPATH"
+    STATEOPTR="-state=$STATEPATH"
 fi
 
 # Process module array
 # Probe all resources if the array is empty
 if [ ${#MODULES[@]} -eq 0 ]
 then
-    MODULES=($( terraform state list | grep "^module\..*\..*\(domain\)\|\(main_disk\)$" | cut -d. -f2 | sort -u ))
+    MODULES=($( terraform state list $STATEOPTR | grep "^module\..*\..*\(domain\)\|\(main_disk\)$" | cut -d. -f2 | sort -u ))
 fi
 
 # Perform destroy
@@ -90,7 +92,7 @@ then
         fi
     done
 
-    terraform destroy ${DESTROY_TARGETS[@]} $STATEOPT $FORCEOPT
+    terraform destroy ${DESTROY_TARGETS[@]} $STATEOPTW $FORCEOPT
     exit
 fi
 
@@ -99,9 +101,10 @@ for MOD in ${MODULES[@]}
 do
     if [[ $MOD = *"$FILTER"* ]]
     then
-        MODNAME=$(terraform state list module.$MOD | head -n1 | cut -d. -f2,4 | sed -r s/\.\(main_disk\)\|\(domain\)//)
+        # Remove trailing dot if exists (fixes names for resources derived from 'host' module)
+        MODNAME=$(terraform state list $STATEOPTR module.$MOD | head -n1 | cut -d. -f2,4 | sed -r s/\\.\(main_disk\)\|\(domain\)// | sed s/\\.$//)
         echo $MODNAME
-        terraform $CMD -module $MODNAME $STATEOPT libvirt_domain.domain; \
-        terraform $CMD -module $MODNAME $STATEOPT libvirt_volume.main_disk
+        terraform $CMD -module $MODNAME $STATEOPTW libvirt_domain.domain; \
+        terraform $CMD -module $MODNAME $STATEOPTW libvirt_volume.main_disk
     fi
 done

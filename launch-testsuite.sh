@@ -57,7 +57,9 @@ done
 
 if [ -n "$STATEPATH" ]
 then
-    TFSTATEARG="-state=$STATEPATH -state-out=$STATEPATH"
+    # State file options for read and write commands
+    TFSTATEARGW="-state=$STATEPATH -state-out=$STATEPATH"
+    TFSTATEARGR="-state=$STATEPATH"
     STATEARG="-s $STATEPATH"
     STATEDIR=$(dirname $STATEPATH)
 fi
@@ -74,13 +76,13 @@ else
 fi
 
 terraform get
-terraform apply -auto-approve $TFSTATEARG
+terraform apply -auto-approve $TFSTATEARGW
 
 if [ -n "$SPACEWALKDIR" ]
 then
     sleep 10
 
-    SRV_NAME=$(terraform state show $TFSTATEARG $(terraform state list $TFSTATEARG | grep suse_manager.libvirt_domain) |\
+    SRV_NAME=$(terraform state show $TFSTATEARGR $(terraform state list $TFSTATEARGR | grep suse_manager.libvirt_domain) |\
         grep ^name | sed -r s/\\s+//g | cut -d= -f2)
     SRV_FQDN=$SRV_NAME.tf.local
     ssh-keygen -R $SRV_FQDN
@@ -96,7 +98,7 @@ then
     cd $CURDIR
 fi
 
-CTRL_NAME=$(terraform state show $TFSTATEARG $(terraform state list $TFSTATEARG | grep controller.libvirt_domain) |\
+CTRL_NAME=$(terraform state show $TFSTATEARGR $(terraform state list $TFSTATEARGR | grep controller.libvirt_domain) |\
     grep ^name | sed -r s/\\s+//g | cut -d= -f2)
 CTRL_FQDN=$CTRL_NAME.tf.local
 CTRL_IP=$(getent hosts $CTRL_FQDN | awk '{ print $1 }')
