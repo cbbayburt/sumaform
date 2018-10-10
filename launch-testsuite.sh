@@ -111,7 +111,7 @@ ssh-keyscan $CTRL_IP >> ~/.ssh/known_hosts
 # Remove non-core features from the run set
 if [ -n "$CORE_ONLY" ]
 then
-    ssh root@$CTRL_FQDN sed -i /core_.*\.feature/\!d spacewalk/testsuite/run_sets/testsuite.yaml
+    ssh root@$CTRL_FQDN sed -i /core_.*\.feature/\!d spacewalk/testsuite/run_sets/testsuite.yml
 fi
 
 # Run the testsuite
