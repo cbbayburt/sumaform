@@ -6,8 +6,8 @@
 # Usage: launch-testsuite [OPTION]...
 #
 # A utility script to create/reset required resources and launch the testsuite
-# when the resources are ready. Unless the --keep option is set, all resources
-# are destroyed after the run. Therefore, the script can be run consequently.
+# when the resources are ready. All resources are tainted after the run.
+# Therefore, the script can be run consequently.
 #
 #   -c, --core-only            only run the core features
 #   -s, --state FILE           tfstate file to read from / write to (if the file
@@ -15,9 +15,7 @@
 #       --spacewalk-dir DIR    deploy the compiled java application in the
 #                                spacewalk repository DIR with ant prior to the
 #                                test run. Useful to test fixes on-the-fly
-#       --keep                 just taint and keep the resources instead of
-#                                destroying them after the test run. Useful for
-#                                post-mortem debugging
+#       --destroy              destroy the resources after the test run
 #   -o, --output-dir DIR       store the generated Cucumber log files in DIR
 #                                (the default is the current directory)
 #
@@ -48,8 +46,8 @@ do key="$1"
             shift
             shift
             ;;
-        --keep)
-            KEEP=1
+        --destroy)
+            DESTROY=1
             shift
             ;;
     esac
@@ -122,10 +120,10 @@ scp root@$CTRL_FQDN:/root/spacewalk/testsuite/output.html $OUTPUTDIR/output-$(da
 scp root@$CTRL_FQDN:/root/spacewalk/testsuite/spacewalk-debug.tar.bz2 $OUTPUTDIR/spacewalk-debug-$(date +%Y-%m-%d-%H-%M-%S).tar.bz2
 
 # Cleanup: destroy resources
-if [ -z "$KEEP" ]
+if [ -z "$DESTROY" ]
 then
-    ./recreate.sh $STATEARG -d --force-destroy
-else
     # Just taint all resources
     ./recreate.sh $STATEARG
+else
+    ./recreate.sh $STATEARG -d --force-destroy
 fi
