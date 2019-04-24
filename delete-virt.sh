@@ -10,8 +10,8 @@
 #
 #   PREFIX     the name prefix of the VMs
 #
+# TODO: Add optional connection string for libvirt
 
-CONNSTR="qemu:///system"
 POOL="default"
 PREFIX=$1
 
@@ -21,8 +21,8 @@ then
     exit;
 fi
 
-for f in `virsh -c $CONNSTR vol-list default | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f1`; do virsh -c $CONNSTR vol-delete --pool $POOL $f; done;
+for f in `virsh vol-list default | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f1`; do virsh vol-delete --pool $POOL $f; done;
 
-for f in `virsh -c $CONNSTR list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh -c $CONNSTR undefine $f; done;
+for f in `virsh list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh undefine $f; done;
 
-for f in `virsh -c $CONNSTR list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh -c $CONNSTR shutdown $f; done;
+for f in `virsh list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh shutdown $f; done;
