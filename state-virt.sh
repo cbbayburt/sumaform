@@ -10,8 +10,8 @@
 #   STATE      1 to start, 0 to shutdown
 #   PREFIX     the name prefix of the VMs
 #
+# TODO: Add optional connection string for libvirt
 
-CONNSTR="qemu:///system"
 STATE=$1
 PREFIX=$2
 
@@ -29,4 +29,4 @@ then
     CMD="start";
 fi
 
-for f in `virsh -c $CONNSTR list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh -c $CONNSTR $CMD $f; done;
+for f in `virsh list --all | grep $PREFIX | sed -r s/\\\s+/' '/g | sed s/^' '// | cut -d' ' -f2`; do virsh $CMD $f; done;
