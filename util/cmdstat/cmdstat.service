@@ -1,0 +1,14 @@
+[Unit]
+Description=command status watcher for Arduino
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=cbbayburt
+ExecStart=/usr/bin/python3 /home/cbbayburt/sumaform/util/cmdstat/cmdstat.py terraform spacewalk-repo-sync@cb-uyuni
+
+[Install]
+WantedBy=multi-user.target
