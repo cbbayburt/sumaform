@@ -89,4 +89,8 @@ if [ "$1" = "qam-parallel" ]; then
   stage qam_finishing
 fi
 
+if [ "$1" = "custom" ]; then
+  stage $2
+fi
+
 exit $RESULT
