@@ -207,6 +207,14 @@ create_xauthority_file:
   cmd.run:
    - name: touch /root/.Xauthority
 
+screenrc:
+  file.managed:
+    - name: /root/.screenrc
+    - source: salt://controller/screenrc
+    - user: root
+    - group: root
+    - mode: 644
+
 chrome_certs:
   file.directory:
     - user:  root
