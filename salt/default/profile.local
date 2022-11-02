@@ -1,0 +1,1 @@
+alias loglast='watch -t "ls -t1 | head -1 | xargs tail -v"'

@@ -12,6 +12,7 @@ include:
   # https://build.opensuse.org/project/show/systemsmanagement:sumaform:images:microos
   - default.testsuite
   {% endif %}
+  - default.extras
 
 
 {% if grains.get('swap_file_size', "0")|int() > 0 %}
