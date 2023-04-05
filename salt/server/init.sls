@@ -19,6 +19,7 @@ include:
   - server.large_deployment
   - server.salt_master
   - server.tcpdump
+  - server.bash-completion
 
 {% if 'paygo' not in grains.get('product_version') | default('', true) %}
 {% if 'uyuni' not in grains.get('product_version') %}
