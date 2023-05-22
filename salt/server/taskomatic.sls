@@ -7,10 +7,10 @@ taskomatic_config:
   file.replace:
     - name: /etc/rhn/taskomatic.conf
     - pattern: JAVA_OPTS=""
-    {% if grains['hostname'] and grains['domain'] %}
-    - repl: JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address={{ grains['hostname'] }}.{{ grains['domain'] }}:8001,server=y,suspend=n"
+    {% if grains.get('hostname') and grains.get('domain') %}
+    - repl: JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address={{ grains.get('hostname') }}.{{ grains.get('domain') }}:8001,server=y,suspend=n"
     {% else %}
-    - repl: JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address={{ grains['fqdn'] }}:8001,server=y,suspend=n"
+    - repl: JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address={{ grains.get('fqdn') }}:8001,server=y,suspend=n"
     {% endif %}
     - require:
       - sls: server.rhn

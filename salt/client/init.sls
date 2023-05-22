@@ -12,18 +12,18 @@ wget:
 base_bootstrap_script:
   file.managed:
     - name: /root/bootstrap.sh
-    - source: http://{{grains['server']}}/pub/bootstrap/bootstrap.sh
-    - source_hash: http://{{grains['server']}}/pub/bootstrap/bootstrap.sh.sha512
+    - source: http://{{grains.get('server')}}/pub/bootstrap/bootstrap.sh
+    - source_hash: http://{{grains.get('server')}}/pub/bootstrap/bootstrap.sh.sha512
     - mode: 755
 
 bootstrap_script:
   file.replace:
     - name: /root/bootstrap.sh
     - pattern: ^PROFILENAME="".*$
-    {% if grains['hostname'] and grains['domain'] %}
-    - repl: PROFILENAME="{{ grains['hostname'] }}.{{ grains['domain'] }}"
+    {% if grains.get('hostname') and grains.get('domain') %}
+    - repl: PROFILENAME="{{ grains.get('hostname') }}.{{ grains.get('domain') }}"
     {% else %}
-    - repl: PROFILENAME="{{grains['fqdn']}}"
+    - repl: PROFILENAME="{{grains.get('fqdn')}}"
     {% endif %}
     - require:
       - file: base_bootstrap_script

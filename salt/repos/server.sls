@@ -1,11 +1,11 @@
-{% if 'server' in grains.get('roles') %}
+{% if grains.get('roles') is not none and 'server' in grains.get('roles') %}
 
 include:
-  {%- if '4.2' in grains['product_version'] %}
+  {%- if grains.get('product_version') is not none and '4.2' in grains.get('product_version') %}
   - repos.server42
-  {%- elif '4.3' in grains['product_version'] %}
+  {%- elif grains.get('product_version') is not none and '4.3' in grains.get('product_version') %}
   - repos.server43
-  {%- elif 'head' in grains['product_version'] %}
+  {%- elif grains.get('product_version') is not none and 'head' in grains.get('product_version') %}
   - repos.serverHead
   {%- else %}
   - repos.serverUyuni

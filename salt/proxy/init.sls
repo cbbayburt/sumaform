@@ -4,7 +4,7 @@ include:
   - repos
   {% endif %}
   - proxy.additional_disk
-{% if grains['minion'] %}
+{% if grains.get('minion') %}
   - minion
 {% endif %}
 
@@ -27,7 +27,7 @@ proxy-packages:
   pkg.installed:
     - pkgs:
 {% if grains.get('install_proxy_pattern') %}
-      {% if grains['osfullname'] == 'Leap' %}
+      {% if grains.get('osfullname') == 'Leap' %}
       - patterns-uyuni_proxy
       {% else %}
       - patterns-suma_proxy
@@ -48,8 +48,8 @@ proxy-packages:
 
 {% if install_proxy_container_packages %}
 
-{% if 'uyuni' in grains.get('product_version') %}
-  {% if '-released' in grains.get('product_version') %}
+{% if grains.get('product_version') is not none and 'uyuni' in grains.get('product_version') %}
+  {% if grains.get('product_version') is not none and '-released' in grains.get('product_version') %}
     {% set client_tools_repo =  grains.get("mirror") | default("download.opensuse.org", true) ~ '/repositories/systemsmanagement:/Uyuni:/Stable:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/' %}
   {% else %}
     {% set client_tools_repo =  grains.get("mirror") | default("download.opensuse.org", true) ~ '/repositories/systemsmanagement:/Uyuni:/Master:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/' %}
@@ -64,8 +64,8 @@ galaxy_key:
     - watch:
       - file: galaxy_key
 
-{% elif '4.3' in grains.get('product_version') %}
-  {% if '-released' in grains.get('product_version') %}
+{% elif grains.get('product_version') is not none and '4.3' in grains.get('product_version') %}
+  {% if grains.get('product_version') is not none and '-released' in grains.get('product_version') %}
     {% set client_tools_repo = grains.get("mirror") | default("download.suse.de/ibs", true) ~ '/SUSE/Updates/SLE-Manager-Tools/15/x86_64/update/' %}
   {% else %}
     {% set client_tools_repo =  grains.get("mirror") | default("download.suse.de", true) ~ '/ibs/Devel:/Galaxy:/Manager:/4.3:/SLE15-SUSE-Manager-Tools/images/repo/SLE-15-Manager-Tools-POOL-x86_64-Media1/' %}
@@ -85,8 +85,8 @@ proxy-container-packages:
       - uyuni-proxy-systemd-services
 
 # Set up the Docker/Podman registry for development
-{% if not '-released' in grains.get('product_version') %}
-  {% if 'uyuni' in grains.get('product_version') %}
+{% if not grains.get('product_version') is not none and '-released' in grains.get('product_version') %}
+  {% if grains.get('product_version') is not none and 'uyuni' in grains.get('product_version') %}
 proxy_substitute_uyuni_registry:
   file.replace:
     - name: /etc/sysconfig/uyuni-proxy-systemd-services
@@ -94,7 +94,7 @@ proxy_substitute_uyuni_registry:
     - repl: registry.opensuse.org/systemsmanagement/uyuni/master/containers/uyuni
     - require:
       - proxy-container-packages
-  {% elif '4.3' in grains.get('product_version') %}
+  {% elif grains.get('product_version') is not none and '4.3' in grains.get('product_version') %}
 proxy_substitute_suma_registry:
   file.replace:
     - name: /etc/sysconfig/uyuni-proxy-systemd-services
@@ -111,7 +111,7 @@ proxy_client_tools_repo_removed:
     - name: proxy_client_tools_repo
 {% endif %}
 
-{% if '4' in grains['product_version'] and grains['osfullname'] != 'Leap' and 'build_image' not in grains.get('product_version') %}
+{% if grains.get('product_version') is not none and '4' in grains.get('product_version') and grains.get('osfullname') != 'Leap' and 'build_image' not in grains.get('product_version') %}
 product_package_installed:
    cmd.run:
      - name: zypper --non-interactive install --auto-agree-with-licenses --force-resolution -t product SUSE-Manager-Proxy
@@ -126,7 +126,7 @@ wget:
       - sls: repos
     {% endif %}
 
-{% if grains['use_avahi'] and grains.get('install_proxy_pattern') %}
+{% if grains.get('use_avahi') and grains.get('install_proxy_pattern') %}
 
 squid-configuration-dns-multicast:
   file.replace:
@@ -163,18 +163,18 @@ proxy_substitute_sslprotocols:
 base_bootstrap_script:
   file.managed:
     - name: /root/bootstrap.sh
-    - source: http://{{grains['server']}}/pub/bootstrap/bootstrap.sh
-    - source_hash: http://{{grains['server']}}/pub/bootstrap/bootstrap.sh.sha512
+    - source: http://{{grains.get('server')}}/pub/bootstrap/bootstrap.sh
+    - source_hash: http://{{grains.get('server')}}/pub/bootstrap/bootstrap.sh.sha512
     - mode: 755
 
 bootstrap_script:
   file.replace:
     - name: /root/bootstrap.sh
     - pattern: ^PROFILENAME="".*$
-    {% if grains['hostname'] and grains['domain'] %}
-    - repl: PROFILENAME="{{ grains['hostname'] }}.{{ grains['domain'] }}"
+    {% if grains.get('hostname') and grains.get('domain') %}
+    - repl: PROFILENAME="{{ grains.get('hostname') }}.{{ grains.get('domain') }}"
     {% else %}
-    - repl: PROFILENAME="{{grains['fqdn']}}"
+    - repl: PROFILENAME="{{grains.get('fqdn')}}"
     {% endif %}
     - require:
       - file: base_bootstrap_script
@@ -193,8 +193,8 @@ bootstrap_script:
 internal-trusted-cert:
   file.managed:
     - name: /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
-    - source: http://{{grains['server']}}/pub/RHN-ORG-TRUSTED-SSL-CERT
-    - source_hash: http://{{grains['server']}}/pub/RHN-ORG-TRUSTED-SSL-CERT.sha512
+    - source: http://{{grains.get('server')}}/pub/RHN-ORG-TRUSTED-SSL-CERT
+    - source_hash: http://{{grains.get('server')}}/pub/RHN-ORG-TRUSTED-SSL-CERT.sha512
     - requires:
       - pkg: proxy-packages
 
@@ -213,8 +213,8 @@ ssl-building-trusted-cert:
 ssl-building-private-ssl-key:
   file.managed:
     - name: /root/ssl-build/RHN-ORG-PRIVATE-SSL-KEY
-    - source: http://{{grains['server']}}/pub/RHN-ORG-PRIVATE-SSL-KEY
-    - source_hash: http://{{grains['server']}}/pub/RHN-ORG-PRIVATE-SSL-KEY.sha512
+    - source: http://{{grains.get('server')}}/pub/RHN-ORG-PRIVATE-SSL-KEY
+    - source_hash: http://{{grains.get('server')}}/pub/RHN-ORG-PRIVATE-SSL-KEY.sha512
     - requires:
       - pkg: proxy-packages
       - file: ssl-build-directory
@@ -222,8 +222,8 @@ ssl-building-private-ssl-key:
 ssl-building-ca-configuration:
   file.managed:
     - name: /root/ssl-build/rhn-ca-openssl.cnf
-    - source: http://{{grains['server']}}/pub/rhn-ca-openssl.cnf
-    - source_hash: http://{{grains['server']}}/pub/rhn-ca-openssl.cnf.sha512
+    - source: http://{{grains.get('server')}}/pub/rhn-ca-openssl.cnf
+    - source_hash: http://{{grains.get('server')}}/pub/rhn-ca-openssl.cnf.sha512
     - requires:
       - pkg: proxy-packages
       - file: ssl-build-directory
@@ -256,7 +256,7 @@ configure-proxy:
 
 create_bootstrap_script:
   cmd.run:
-    - name: rhn-bootstrap --activation-keys=1-DEFAULT --no-up2date --hostname {{ grains['hostname'] }}.{{ grains['domain'] }} --traditional
+    - name: rhn-bootstrap --activation-keys=1-DEFAULT --no-up2date --hostname {{ grains.get('hostname') }}.{{ grains.get('domain') }} --traditional
     - creates: /srv/www/htdocs/pub/bootstrap/bootstrap.sh
     - require:
       - cmd: configure-proxy
@@ -319,7 +319,7 @@ preload_conntrack_modules_and_enable_them_at_boottime:
   file.managed:
     - name: /etc/modules-load.d/nf_conntrack.conf
     - content: |
-{% if salt['pkg.version_cmp'](grains['kernelrelease'],'4.19') < 0 %}
+{% if salt['pkg.version_cmp'](grains.get('kernelrelease'),'4.19') < 0 %}
         nf_conntrack_ipv4
         nf_conntrack_ipv6
 {% endif %}
@@ -327,7 +327,7 @@ preload_conntrack_modules_and_enable_them_at_boottime:
     - require:
       - pkg: proxy-packages
   cmd.run:
-{% if salt['pkg.version_cmp'](grains['kernelrelease'],'4.19') < 0 %}
+{% if salt['pkg.version_cmp'](grains.get('kernelrelease'),'4.19') < 0 %}
     - name: modprobe nf_conntrack_ipv4 && modprobe nf_conntrack_ipv6
 {% else %}
     - name: modprobe nf_conntrack

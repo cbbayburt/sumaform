@@ -1,30 +1,30 @@
 include:
   - default.hostname
 
-{% if grains['use_avahi'] and grains.get('osmajorrelease', None) != None %}
+{% if grains.get('use_avahi') and grains.get('osmajorrelease', None) != None %}
 
 # TODO: remove the following state when fix to bsc#1163683 is applied to all the SLES <= SLES15SP4
-{% if grains['osfullname'] == 'SLES' and grains['osrelease'] != '15.5' %}
+{% if grains.get('osfullname') == 'SLES' and grains.get('osrelease') != '15.5' %}
 custom_avahi_repo:
   pkgrepo.managed:
     - humanname: custom_avahi_repo
-    {%   if grains['osrelease'] == '11.4' %}
+    {%   if grains.get('osrelease') == '11.4' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.6.23/SLE_11_SP4/
-    {% elif grains['osrelease'] == '12.3' %}
+    {% elif grains.get('osrelease') == '12.3' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.6.32/SLE_12_SP3/
-    {% elif grains['osrelease'] == '12.4' %}
+    {% elif grains.get('osrelease') == '12.4' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.6.32/SLE_12_SP4/
-    {% elif grains['osrelease'] == '12.5' %}
+    {% elif grains.get('osrelease') == '12.5' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.6.32/SLE_12_SP5/
-    {% elif grains['osrelease'] == '15' %}
+    {% elif grains.get('osrelease') == '15' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.7/SLE_15/
-    {% elif grains['osrelease'] == '15.1' %}
+    {% elif grains.get('osrelease') == '15.1' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.7/SLE_15_SP1/
-    {% elif grains['osrelease'] == '15.2' %}
+    {% elif grains.get('osrelease') == '15.2' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.7/SLE_15_SP2/
-    {% elif grains['osrelease'] == '15.3' %}
+    {% elif grains.get('osrelease') == '15.3' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.7/SLE_15_SP3/
-    {% elif grains['osrelease'] == '15.4' %}
+    {% elif grains.get('osrelease') == '15.4' %}
     - baseurl: http://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.8/15.4/
     {% endif %}
     - enabled: True
@@ -33,7 +33,7 @@ custom_avahi_repo:
     - gpgcheck: 0
 {% endif %}
 
-{% if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int() == 6 %}
+{% if grains.get('os_family') == 'RedHat' and grains.get('osmajorrelease')|int() == 6 %}
 dbus_enable_service:
   service.running:
     - name: messagebus
@@ -42,27 +42,27 @@ dbus_enable_service:
 
 # TODO: replace 'pkg.latest' with 'pkg.installed' when fix to bsc#1163683 is applied to all the SLES versions we use
 avahi_pkg:
-{% if grains['os_family'] == 'Suse' and grains['osfullname'] == 'SLE Micro'  %}
+{% if grains.get('os_family') == 'Suse' and grains.get('osfullname') == 'SLE Micro'  %}
 # WORKAROUND for sle micro we should not ask for the latest by just check that is installed. We are building our image for sumaform.
   pkg.installed:
 {% else %}
   pkg.latest:
 {% endif %}
     - pkgs:
-      {% if grains['os_family'] == 'Debian' %}
+      {% if grains.get('os_family') == 'Debian' %}
       - avahi-daemon
       - libavahi-common-data
       - libavahi-common3
       - libavahi-core7
-      {% elif grains['os_family'] == 'RedHat' %}
+      {% elif grains.get('os_family') == 'RedHat' %}
       - avahi
       - avahi-libs
       - nss-mdns
-      {% elif grains['os_family'] == 'Suse' %}
+      {% elif grains.get('os_family') == 'Suse' %}
       - avahi
       - avahi-lang
       - libavahi-common3
-      {% if grains['osmajorrelease']|int() == 11 %}
+      {% if grains.get('osmajorrelease')|int() == 11 %}
       - libavahi-core5
       {% else %}
       - libavahi-core7
@@ -78,7 +78,7 @@ avahi_change_domain:
   file.replace:
     - name: /etc/avahi/avahi-daemon.conf
     - pattern: "#domain-name=local"
-    - repl: "domain-name={{ grains['domain'] }}"
+    - repl: "domain-name={{ grains.get('domain') }}"
 
 avahi_restrict_interfaces:
   file.replace:
@@ -89,7 +89,7 @@ avahi_restrict_interfaces:
 # HACK: always disable IPv6 in avahi settings
 # to work around https://github.com/lathiat/avahi/issues/110
 # uncomment the following conditional when issue is fixed
-# {% if not grains.get('ipv6')['enable'] %}
+# {% if not grains.get('ipv6:enable') %}
 avahi_disable_ipv6:
   file.replace:
     - name: /etc/avahi/avahi-daemon.conf

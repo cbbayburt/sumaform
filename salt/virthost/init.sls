@@ -9,11 +9,11 @@ no_kernel_default_base:
 virthost_packages:
   pkg.installed:
     - pkgs:
-        {% if '15' in grains['osrelease'] %}
+        {% if grains.get('osrelease') is not none and '15' in grains.get('osrelease') %}
         - patterns-server-kvm_server
         - python3-six  # WORKAROUND: missing virt-manager-common dependency
         - libvirt-daemon-qemu
-        {% elif grains['osfullname'] == 'Leap' %}
+        {% elif grains.get('osfullname') == 'Leap' %}
         - patterns-openSUSE-kvm_server
         {% else %}
         - patterns-sles-kvm_server
@@ -29,7 +29,7 @@ virthost_packages:
       - sls: repos
       - pkg: no_kernel_default_base
 
-{% if grains['osrelease'] == '12.4' %}
+{% if grains.get('osrelease') == '12.4' %}
 # WORKAROUND for guestfs appliance missing libaugeas0 on 12SP4
 guestfs-fix:
   file.append:
@@ -40,7 +40,7 @@ guestfs-fix:
 {% endif %}
 
 # WORKAROUND for bsc#1181264
-{% if grains['osrelease'] == '15.3' %}
+{% if grains.get('osrelease') == '15.3' %}
 no-50-xen-hvm-x86_64.json:
   file.absent:
     - name: /usr/share/qemu/firmware/50-xen-hvm-x86_64.json
@@ -74,7 +74,7 @@ ifcfg-br0:
         BRIDGE=yes
         BRIDGE_PORTS=eth0
 
-{% if grains['hvm_disk_image'] %}
+{% if grains.get('hvm_disk_image') %}
 {% for os_type in grains.get('hvm_disk_image') %}
 {{ os_type }}-disk-image-template.qcow2:
   file.managed:

@@ -12,8 +12,8 @@ tar:
 {% set fstype = grains.get('data_disk_fstype') | default('ext4', true) %}
 jenkins_partition:
   cmd.run:
-    - name: /usr/sbin/parted -s /dev/{{grains['data_disk_device']}} mklabel gpt && /usr/sbin/parted -s /dev/{{grains['data_disk_device']}} mkpart primary 2048 100% && sleep 1 && /sbin/mkfs.{{fstype}} /dev/{{grains['data_disk_device']}}1
-    - unless: ls /dev//{{grains['data_disk_device']}}1
+    - name: /usr/sbin/parted -s /dev/{{grains.get('data_disk_device')}} mklabel gpt && /usr/sbin/parted -s /dev/{{grains.get('data_disk_device')}} mkpart primary 2048 100% && sleep 1 && /sbin/mkfs.{{fstype}} /dev/{{grains.get('data_disk_device')}}1
+    - unless: ls /dev//{{grains.get('data_disk_device')}}1
     - require:
       - pkg: parted
 
@@ -24,7 +24,7 @@ jenkins_directory:
     - makedirs: True
   mount.mounted:
     - name: /var/lib/jenkins
-    - device: /dev/{{grains['data_disk_device']}}1
+    - device: /dev/{{grains.get('data_disk_device')}}1
     - fstype: {{fstype}}
     - mkmnt: True
     - persist: True

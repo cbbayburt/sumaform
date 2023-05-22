@@ -1,5 +1,5 @@
 allow_vendor_changes:
-  {% if grains['osfullname'] == 'Leap' %}
+  {% if grains.get('osfullname') == 'Leap' %}
   file.managed:
     - name: /etc/zypp/vendors.d/opensuse
     - makedirs: True

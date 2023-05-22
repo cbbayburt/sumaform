@@ -1,31 +1,31 @@
-{% if grains['os'] == 'SUSE' and (
-      'controller' in grains.get('roles') or
-      'grafana' in grains.get('roles') or
-      'mirror' in grains.get('roles') or
+{% if grains.get('os') == 'SUSE' and (
+      grains.get('roles') is not none and 'controller' in grains.get('roles') or
+      grains.get('roles') is not none and 'grafana' in grains.get('roles') or
+      grains.get('roles') is not none and 'mirror' in grains.get('roles') or
       grains.get('evil_minion_count') or
       grains.get('monitored')
 ) %}
 
-{% if grains['osfullname'] == 'Leap' %}
-{% set path = 'openSUSE_Leap_' + grains['osrelease'] %}
+{% if grains.get('osfullname') == 'Leap' %}
+{% set path = 'openSUSE_Leap_' + grains.get('osrelease') %}
 {% endif %}
 
-{% if grains['osfullname'] != 'Leap' %}
-{% if grains['osrelease'] == '11.4' %}
+{% if grains.get('osfullname') != 'Leap' %}
+{% if grains.get('osrelease') == '11.4' %}
 {% set path = 'SLE_11_SP4' %}
-{% elif grains['osrelease'] == '12.3' %}
+{% elif grains.get('osrelease') == '12.3' %}
 {% set path = 'SLE_12_SP3' %}
-{% elif grains['osrelease'] == '12.4' %}
+{% elif grains.get('osrelease') == '12.4' %}
 {% set path = 'SLE_12_SP4' %}
-{% elif grains['osrelease'] == '15.1' %}
+{% elif grains.get('osrelease') == '15.1' %}
 {% set path = 'SLE_15_SP1' %}
-{% elif grains['osrelease'] == '15.2' %}
+{% elif grains.get('osrelease') == '15.2' %}
 {% set path = 'SLE_15_SP2' %}
-{% elif grains['osrelease'] == '15.3' %}
+{% elif grains.get('osrelease') == '15.3' %}
 {% set path = 'SLE_15_SP3' %}
-{% elif grains['osrelease'] == '15.4' %}
+{% elif grains.get('osrelease') == '15.4' %}
 {% set path = 'SLE_15_SP4' %}
-{% elif grains['osrelease'] == '15.5' %}
+{% elif grains.get('osrelease') == '15.5' %}
 {% set path = 'SLE_15_SP5' %}
 {% endif %}
 {% endif %}

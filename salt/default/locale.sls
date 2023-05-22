@@ -1,4 +1,4 @@
-{% if grains['os_family'] == 'Suse' %}
+{% if grains.get('os_family') == 'Suse' %}
 manually_set_locale_rc_lang:
   file.replace:
     - name: /etc/sysconfig/language
@@ -20,7 +20,7 @@ manually_set_locale_installed_languages:
     - repl: INSTALLED_LANGUAGES=""
     - onlyif: test ! -f /usr/bin/localectl
 
-{% elif grains['os_family'] == 'RedHat' %}
+{% elif grains.get('os_family') == 'RedHat' %}
 
 {% if grains.get('osmajorrelease', None)|int() == 9 %}
 langpack_package:

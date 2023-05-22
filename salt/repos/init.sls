@@ -14,10 +14,10 @@ include:
   {% endif %}
   - repos.additional
 
-{% if grains['os'] == 'SUSE' %}
+{% if grains.get('os') == 'SUSE' %}
 refresh_repos:
   cmd.run:
-{% if grains['osfullname'] == 'SLE Micro' %}
+{% if grains.get('osfullname') == 'SLE Micro' %}
     - name: transactional-update -c run zypper --non-interactive --gpg-auto-import-keys refresh --force
 {% else %}
     - name: zypper --non-interactive --gpg-auto-import-keys refresh --force; exit 0

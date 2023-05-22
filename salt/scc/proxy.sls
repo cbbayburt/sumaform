@@ -1,6 +1,6 @@
-{% if 'proxy' in grains.get('roles') and grains.get('proxy_registration_code') %}
+{% if grains.get('roles') is not none and 'proxy' in grains.get('roles') and grains.get('proxy_registration_code') %}
 
-{% if '4.1' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.1' in grains.get('product_version') %}
 register_suse_manager_proxy_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("proxy_registration_code") }} -p SUSE-Manager-Proxy/4.1/x86_64
@@ -15,7 +15,7 @@ add_sle_module_suse_manager_proxy:
      - name: SUSEConnect -p sle-module-suse-manager-proxy/4.1/x86_64
 {% endif %}
 
-{% if '4.2' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.2' in grains.get('product_version') %}
 register_suse_manager_proxy_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("proxy_registration_code") }} -p SUSE-Manager-Proxy/4.2/x86_64
@@ -30,7 +30,7 @@ add_sle_module_suse_manager_proxy:
      - name: SUSEConnect -p sle-module-suse-manager-proxy/4.2/x86_64
 {% endif %}
 
-{% if '4.3' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.3' in grains.get('product_version') %}
 register_suse_manager_proxy_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("proxy_registration_code") }} -p SUSE-Manager-Proxy/4.3/x86_64

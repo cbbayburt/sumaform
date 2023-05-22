@@ -11,32 +11,32 @@ install_{{ keypath }}:
       - file: /tmp/{{ keyname }}
 {% endfor %}
 
-{% if grains['os'] == 'SUSE' %}
-{% if grains['osfullname'] == 'Leap' %}
+{% if grains.get('os') == 'SUSE' %}
+{% if grains.get('osfullname') == 'Leap' %}
 os_pool_repo:
   pkgrepo.managed:
-    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/distribution/leap/{{ grains['osrelease'] }}/repo/oss/
+    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/distribution/leap/{{ grains.get('osrelease') }}/repo/oss/
     - refresh: True
 
 os_update_repo:
   pkgrepo.managed:
-    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains['osrelease'] }}/oss/
+    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains.get('osrelease') }}/oss/
     - refresh: True
 
-{% if grains['osrelease_info'][0] == 15 and grains['osrelease_info'][1] >= 3 %}
+{% if grains.get('osrelease_info')[0] == 15 and grains.get('osrelease_info')[1] >= 3 %}
 sle_update_repo:
   pkgrepo.managed:
-    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains['osrelease'] }}/sle/
+    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains.get('osrelease') }}/sle/
     - refresh: True
 
 backports_update_repo:
   pkgrepo.managed:
-    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains['osrelease'] }}/backports/
+    - baseurl: http://{{ grains.get("mirror") | default("download.opensuse.org", true) }}/update/leap/{{ grains.get('osrelease') }}/backports/
     - refresh: True
 {% endif %}
 
 {% if not grains.get('roles') or ('server' not in grains.get('roles') and 'proxy' not in grains.get('roles')) %}
-{% if grains.get('product_version') and 'uyuni-master' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') and grains.get('product_version') is not none and 'uyuni-master' in grains.get('product_version') | default('', true) %}
 tools_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("downloadcontent.opensuse.org", true) }}/repositories/systemsmanagement:/Uyuni:/Master:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/
@@ -45,7 +45,7 @@ tools_pool_repo:
     - gpgkey: http://{{ grains.get("mirror") | default("downloadcontent.opensuse.org", true) }}/repositories/systemsmanagement:/Uyuni:/Master:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/repodata/repomd.xml.key
     - priority: 98
 
-{% if grains['osrelease_info'][0] == 15 and grains['osrelease_info'][1] >= 3 %}
+{% if grains.get('osrelease_info')[0] == 15 and grains.get('osrelease_info')[1] >= 3 %}
 # Needed because in sles15SP3 and opensuse 15.3 and higher firewalld will replace this package.
 # But the tools_update_repo priority don't allow to cope with the Obsoletes option from firewalld
 lock_firewalld_prometheus_config_leap_cmd:
@@ -53,7 +53,7 @@ lock_firewalld_prometheus_config_leap_cmd:
      - name: zypper addlock firewalld-prometheus-config
 {% endif %}
 
-{% elif not grains.get('product_version') or not 'uyuni-pr' in grains.get('product_version') | default('', true) %}
+{% elif not grains.get('product_version') or not grains.get('product_version') is not none and 'uyuni-pr' in grains.get('product_version') | default('', true) %}
 
 {% if not grains.get('product_version') or grains.get('product_version').startswith('uyuni-') %}
 tools_pool_repo:
@@ -64,7 +64,7 @@ tools_pool_repo:
 {% else %}
 tools_pool_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/15-BETA/x86_64/product/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/15/x86_64/product/
@@ -73,7 +73,7 @@ tools_pool_repo:
 
 tools_update_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/15-BETA/x86_64/update/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/15/x86_64/update/
@@ -84,9 +84,9 @@ tools_update_repo:
 {% endif %}
 {% endif %} {# not grains.get('roles') or ('server' not in grains.get('roles') and 'proxy' not in grains.get('roles')) #}
 
-{% elif grains['osfullname'] == 'SLES' %}
+{% elif grains.get('osfullname') == 'SLES' %}
 
-{% if grains['osrelease'] == '11.4' %}
+{% if grains.get('osrelease') == '11.4' %}
 
 os_pool_repo:
   pkgrepo.managed:
@@ -118,13 +118,13 @@ os_ltss_repo:
 tools_pool_repo:
   pkgrepo.managed:
     {% if grains.get('mirror') %}
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") }}/repo/$RCE/SLES11-SP4-SUSE-Manager-Tools-Beta/sle-11-x86_64/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") }}/repo/$RCE/SLES11-SP4-SUSE-Manager-Tools/sle-11-x86_64/
     {% endif %}
     {% else %}
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://euklid.nue.suse.com/mirror/SuSE/build-ncc.suse.de/SUSE/Updates/SLE-SERVER/11-SP4-CLIENT-TOOLS-BETA/x86_64/update/
     {% else %}
     - baseurl: http://euklid.nue.suse.com/mirror/SuSE/build-ncc.suse.de/SUSE/Updates/SLE-SERVER/11-SP4-CLIENT-TOOLS/x86_64/update/
@@ -133,7 +133,7 @@ tools_pool_repo:
     - refresh: True
 
 # SLE11 will not get Head/4.3 client tools. Submissions to be done from 4.2 until it's EoL from a SUSE Manager POV, and removed completely from sumaform
-{% if 'nightly' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/4.2:/SLE11-SUSE-Manager-Tools/images/repo/SLE-11-SP4-CLIENT-TOOLS-ia64-ppc64-s390x-x86_64-Media1/suse/
@@ -141,11 +141,11 @@ tools_additional_repo:
     - priority: 98
 {% endif %}
 
-{% endif %} {# grains['osrelease'] == '11.4' #}
+{% endif %} {# grains.get('osrelease') == '11.4' #}
 
 
-{% if '12' in grains['osrelease'] %}
-{% if grains['osrelease'] == '12.3' %}
+{% if grains.get('osrelease') is not none and '12' in grains.get('osrelease') %}
+{% if grains.get('osrelease') == '12.3' %}
 
 os_pool_repo:
   pkgrepo.managed:
@@ -157,7 +157,7 @@ os_update_repo:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-SERVER/12-SP3/x86_64/update/
     - refresh: True
 
-{% elif grains['osrelease'] == '12.4' %}
+{% elif grains.get('osrelease') == '12.4' %}
 
 os_pool_repo:
   pkgrepo.managed:
@@ -174,7 +174,7 @@ os_ltss_repo:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-SERVER/12-SP4-LTSS/x86_64/update/
     - refresh: True
 
-{% elif grains['osrelease'] == '12.5' %}
+{% elif grains.get('osrelease') == '12.5' %}
 
 os_pool_repo:
   pkgrepo.managed:
@@ -197,7 +197,7 @@ os_update_repo:
 {% if not grains.get('product_version') or not grains.get('product_version').startswith('uyuni-') %}
 tools_pool_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/12-BETA/x86_64/product/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/12/x86_64/product/
@@ -206,7 +206,7 @@ tools_pool_repo:
 
 tools_update_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/12-BETA/x86_64/update/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/12/x86_64/update/
@@ -220,21 +220,21 @@ tools_pool_repo:
     - priority: 98
 {% endif %}
 
-{% if 'nightly' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/4.3:/SLE12-SUSE-Manager-Tools/images/repo/SLE-12-Manager-Tools-POOL-x86_64-Media1/
     - refresh: True
     - priority: 98
 
-{% elif 'head' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'head' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/Head:/SLE12-SUSE-Manager-Tools/images/repo/SLE-12-Manager-Tools-Beta-POOL-x86_64-Media1/
     - refresh: True
     - priority: 98
 
-{% elif 'uyuni-master' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'uyuni-master' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("downloadcontent.opensuse.org", true) }}/repositories/systemsmanagement:/Uyuni:/Master:/SLE12-Uyuni-Client-Tools/SLE_12/
@@ -243,15 +243,15 @@ tools_additional_repo:
 {% endif %}
 
 {% endif %} {# not grains.get('roles') or ('server' not in grains.get('roles') and 'proxy' not in grains.get('roles')) #}
-{% endif %} {# '12' in grains['osrelease'] #}
+{% endif %} {# grains.get('osrelease') is not none and '12' in grains.get('osrelease') #}
 
 
-{% if '15' in grains['osrelease'] %}
+{% if grains.get('osrelease') is not none and '15' in grains.get('osrelease') %}
 {% if (not grains.get('roles') or ('server' not in grains.get('roles') and 'proxy' not in grains.get('roles'))) %}
 {% if not grains.get('product_version') or not grains.get('product_version').startswith('uyuni-') %}
 tools_pool_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/15-BETA/x86_64/product/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Manager-Tools/15/x86_64/product/
@@ -260,7 +260,7 @@ tools_pool_repo:
 
 tools_update_repo:
   pkgrepo.managed:
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/15-BETA/x86_64/update/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Manager-Tools/15/x86_64/update/
@@ -274,14 +274,14 @@ tools_pool_repo:
     - priority: 98
 {% endif %}
 
-{% if 'nightly' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
   - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/4.3:/SLE15-SUSE-Manager-Tools/images/repo/SLE-15-Manager-Tools-POOL-x86_64-Media1/
   - refresh: True
   - priority: 98
 
-{% if grains['osrelease_info'][0] == 15 and grains['osrelease_info'][1] >= 3 %}
+{% if grains.get('osrelease_info')[0] == 15 and grains.get('osrelease_info')[1] >= 3 %}
 # Needed because in sles15SP3 and opensuse 15.3 and higher firewalld will replace this package.
 # But the tools_update_repo priority don't allow to cope with the Obsoletes option from firewalld
 lock_firewalld_prometheus_config_cmd:
@@ -289,14 +289,14 @@ lock_firewalld_prometheus_config_cmd:
      - name: zypper addlock firewalld-prometheus-config
 {% endif %}
 
-{% elif 'head' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'head' in grains.get('product_version') | default('', true) %}
 tools_additional_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/Head:/SLE15-SUSE-Manager-Tools/images/repo/SLE-15-Manager-Tools-POOL-x86_64-Media1/
     - refresh: True
     - priority: 98
 
-{% if grains['osrelease_info'][0] == 15 and grains['osrelease_info'][1] >= 3 %}
+{% if grains.get('osrelease_info')[0] == 15 and grains.get('osrelease_info')[1] >= 3 %}
 # Needed because in sles15SP3 and opensuse 15.3 and higher firewalld will replace this package.
 # But the tools_update_repo priority don't allow to cope with the Obsoletes option from firewalld
 lock_firewalld_prometheus_config_cmd:
@@ -304,14 +304,14 @@ lock_firewalld_prometheus_config_cmd:
      - name: zypper addlock firewalld-prometheus-config
 {% endif %}
 
-{% elif 'uyuni-master' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'uyuni-master' in grains.get('product_version') | default('', true) %}
 tools_update_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("downloadcontent.opensuse.org", true) }}/repositories/systemsmanagement:/Uyuni:/Master:/SLE15-Uyuni-Client-Tools/SLE_15/
     - refresh: True
     - priority: 98
 
-{% if grains['osrelease_info'][0] == 15 and grains['osrelease_info'][1] >= 3 %}
+{% if grains.get('osrelease_info')[0] == 15 and grains.get('osrelease_info')[1] >= 3 %}
 # Needed because in sles15SP3 and opensuse 15.3 and higher firewalld will replace this package.
 # But the tools_update_repo priority don't allow to cope with the Obsoletes option from firewalld
 lock_firewalld_prometheus_config_cmd:
@@ -323,9 +323,9 @@ lock_firewalld_prometheus_config_cmd:
 
 
 {% endif %} {# not grains.get('roles') or ('server' not in grains.get('roles') and 'proxy' not in grains.get('roles')) #}
-{% endif %} {# '15' in grains['osrelease'] #}
+{% endif %} {# grains.get('osrelease') is not none and '15' in grains.get('osrelease') #}
 
-{% if '15' == grains['osrelease'] %}
+{% if '15' == grains.get('osrelease') %}
 os_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Basesystem/15/x86_64/product/
@@ -341,9 +341,9 @@ os_ltss_repo:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Product-SLES/15-LTSS/x86_64/update/
     - refresh: True
 
-{% endif %} {# '15' == grains['osrelease'] #}
+{% endif %} {# '15' == grains.get('osrelease') #}
 
-{% if '15.1' == grains['osrelease'] and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
+{% if '15.1' == grains.get('osrelease') and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
 os_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Basesystem/15-SP1/x86_64/product/
@@ -359,9 +359,9 @@ os_ltss_repo:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Product-SLES/15-SP1-LTSS/x86_64/update/
     - refresh: True
 
-{% endif %} {# '15.1' == grains['osrelease'] #}
+{% endif %} {# '15.1' == grains.get('osrelease') #}
 
-{% if '15.2' == grains['osrelease'] and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
+{% if '15.2' == grains.get('osrelease') and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
 os_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Basesystem/15-SP2/x86_64/product/
@@ -376,9 +376,9 @@ os_ltss_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/SUSE/Updates/SLE-Product-SLES/15-SP2-LTSS/x86_64/update/
 
-{% endif %} {# '15.2' == grains['osrelease'] #}
+{% endif %} {# '15.2' == grains.get('osrelease') #}
 
-{% if '15.3' == grains['osrelease'] and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
+{% if '15.3' == grains.get('osrelease') and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code')) %}
 
 os_pool_repo:
   pkgrepo.managed:
@@ -394,9 +394,9 @@ os_ltss_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/SUSE/Updates/SLE-Product-SLES/15-SP3-LTSS/x86_64/update/
 
-{% endif %} {# '15.3' == grains['osrelease'] #}
+{% endif %} {# '15.3' == grains.get('osrelease') #}
 
-{% if '15.4' == grains['osrelease'] and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code') ) %}
+{% if '15.4' == grains.get('osrelease') and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code') ) %}
 os_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Basesystem/15-SP4/x86_64/product/
@@ -413,9 +413,9 @@ os_update_repo:
 #    - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/SUSE/Updates/SLE-Product-SLES/15-SP4-LTSS/x86_64/update/
 #    - refresh: True
 
-{% endif %} {# '15.4' == grains['osrelease'] #}
+{% endif %} {# '15.4' == grains.get('osrelease') #}
 
-{% if '15.5' == grains['osrelease'] and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code') ) %}
+{% if '15.5' == grains.get('osrelease') and not ( grains.get('server_registration_code') or grains.get('proxy_registration_code') or grains.get('sles_registration_code') ) %}
 os_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Basesystem/15-SP5/x86_64/product/
@@ -432,22 +432,22 @@ os_update_repo:
 #    - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/SUSE/Updates/SLE-Product-SLES/15-SP5-LTSS/x86_64/update/
 #    - refresh: True
 
-{% endif %} {# '15.5' == grains['osrelease'] #}
+{% endif %} {# '15.5' == grains.get('osrelease') #}
 
-{% endif %} {# grains['osfullname'] == 'SLES' #}
+{% endif %} {# grains.get('osfullname') == 'SLES' #}
 
 install_recommends:
   file.comment:
     - name: /etc/zypp/zypp.conf
     - regex: ^solver.onlyRequires =.*
-{%- if grains['saltversioninfo'][0] >= 3005 %}
+{%- if grains.get('saltversioninfo')[0] >= 3005 %}
     - ignore_missing: True
 {% endif %}
     - onlyif: grep ^solver.onlyRequires /etc/zypp/zypp.conf
 
-{% endif %} {# grains['os'] == 'SUSE' #}
+{% endif %} {# grains.get('os') == 'SUSE' #}
 
-{% if grains['os_family'] == 'RedHat' %}
+{% if grains.get('os_family') == 'RedHat' %}
 
 {% set release = grains.get('osmajorrelease', None)|int() %}
 
@@ -511,19 +511,19 @@ tools_pool_repo:
   pkgrepo.managed:
     - humanname: tools_pool_repo
     {% if release >= 8 %}
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/{{ rhlike_client_tools_prefix }}/{{ release }}-CLIENT-TOOLS-BETA/x86_64/product/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/{{ rhlike_client_tools_prefix }}/{{ release }}-CLIENT-TOOLS/x86_64/product/
     {% endif %}
     {% elif grains.get('mirror') %}
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") }}/repo/$RCE/RES{{ release }}-SUSE-Manager-Tools-Beta/x86_64/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") }}/repo/$RCE/RES{{ release }}-SUSE-Manager-Tools/x86_64/
     {% endif %}
     {% else %}
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://download.suse.de/ibs/SUSE/Updates/RES/{{ release }}-CLIENT-TOOLS-BETA/x86_64/update/
     {% else %}
     # Amazon Linux support
@@ -573,7 +573,7 @@ tools_pool_repo:
       - cmd: uyuni_key
 {% endif %}
 
-{% if 'nightly' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
 
 {% set rhlike_client_tools_prefix = 'EL' %}
 {% if release < 9 %}
@@ -588,7 +588,7 @@ tools_update_repo:
     - require:
       - cmd: galaxy_key
 
-{% elif 'head' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'head' in grains.get('product_version') | default('', true) %}
 
 {% set rhlike_client_tools_prefix = 'EL' %}
 {% if release < 9 %}
@@ -632,7 +632,7 @@ tools_update_repo:
 tools_update_repo:
   pkgrepo.managed:
     - humanname: tools_update_repo
-    {% if 'beta' in grains.get('product_version') | default('', true) %}
+    {% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/{{ rhlike_client_tools_prefix }}/{{ release }}-CLIENT-TOOLS-BETA/x86_64/update/
     {% else %}
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/{{ rhlike_client_tools_prefix }}/{{ release }}-CLIENT-TOOLS/x86_64/update/
@@ -647,9 +647,9 @@ clean_repo_metadata:
   cmd.run:
     - name: yum clean metadata
 
-{% endif %} {# grains['os_family'] == 'RedHat' #}
+{% endif %} {# grains.get('os_family') == 'RedHat' #}
 
-{% if grains['os_family'] == 'Debian' and grains['os'] == 'Ubuntu' %}
+{% if grains.get('os_family') == 'Debian' and grains.get('os') == 'Ubuntu' %}
 
 {% set release = grains.get('osrelease', None) %}
 {% set short_release = release | replace('.', '') %}
@@ -687,17 +687,17 @@ tools_update_repo:
     - humanname: tools_update_repo
     - file: /etc/apt/sources.list.d/tools_update_repo.list
 # We only have one shared Client Tools repository, so we are using 4.3 for 4.2 annd 4.1
-{% if 'nightly' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("download.suse.de", true) + '/ibs/Devel:/Galaxy:/Manager:/4.3:/Ubuntu' + release + '-SUSE-Manager-Tools/xUbuntu_' + release %}
-{% elif 'head' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'head' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("download.suse.de", true) + '/ibs/Devel:/Galaxy:/Manager:/Head:/Ubuntu' + release + '-SUSE-Manager-Tools/xUbuntu_' + release %}
-{% elif 'beta' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'beta' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("download.suse.de/ibs", true) + '/SUSE/Updates/Ubuntu/' + release + '-CLIENT-TOOLS-BETA/x86_64/update/' %}
-{% elif '4.1-released' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and '4.1-released' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("download.suse.de/ibs", true) + '/SUSE/Updates/Ubuntu/' + release + '-CLIENT-TOOLS/x86_64/update/' %}
-{% elif '4.2-released' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and '4.2-released' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("download.suse.de/ibs", true) + '/SUSE/Updates/Ubuntu/' + release + '-CLIENT-TOOLS/x86_64/update/' %}
-{% elif 'uyuni-master' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'uyuni-master' in grains.get('product_version') | default('', true) %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("downloadcontent.opensuse.org", true) + '/repositories/systemsmanagement:/Uyuni:/Master:/Ubuntu' + short_release + '-Uyuni-Client-Tools/xUbuntu_' + release %}
 {% else %}
 {% set tools_repo_url = 'http://' + grains.get("mirror") | default("downloadcontent.opensuse.org", true) + '/repositories/systemsmanagement:/Uyuni:/Stable:/Ubuntu' + short_release + '-Uyuni-Client-Tools/xUbuntu_' + release %}
@@ -709,32 +709,32 @@ tools_update_repo:
 tools_update_repo_raised_priority:
   file.managed:
     - name: /etc/apt/preferences.d/tools_update_repo
-{% if 'head' in grains.get('product_version') | default('', true) %}
+{% if grains.get('product_version') is not none and 'head' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=Devel:Galaxy:Manager:Head:Ubuntu{{ release }}-SUSE-Manager-Tools
             Pin-Priority: 800
-{% elif 'nightly' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'nightly' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=Devel:Galaxy:Manager:4.3:Ubuntu{{ release }}-SUSE-Manager-Tools
             Pin-Priority: 800
-{% elif '4.1-released' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and '4.1-released' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=SUSE:Updates:Ubuntu:{{ release }}-CLIENT-TOOLS:x86_64:update
             Pin-Priority: 800
-{% elif '4.2-released' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and '4.2-released' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=SUSE:Updates:Ubuntu:{{ release }}-CLIENT-TOOLS:x86_64:update
             Pin-Priority: 800
-{% elif 'uyuni-master' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'uyuni-master' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=systemsmanagement:Uyuni:Master:Ubuntu{{ short_release }}-Uyuni-Client-Tools
             Pin-Priority: 800
-{% elif 'uyuni-released' in grains.get('product_version') | default('', true) %}
+{% elif grains.get('product_version') is not none and 'uyuni-released' in grains.get('product_version') | default('', true) %}
     - contents: |
             Package: *
             Pin: release l=systemsmanagement:Uyuni:Stable:Ubuntu{{ short_release }}-Uyuni-Client-Tools
@@ -742,7 +742,7 @@ tools_update_repo_raised_priority:
 {% endif %}
 {% endif %}
 
-{% if grains['os_family'] == 'Debian' %}
+{% if grains.get('os_family') == 'Debian' %}
 remove_no_install_recommends:
   file.absent:
     - name: /etc/apt/apt.conf.d/00InstallRecommends

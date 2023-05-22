@@ -85,7 +85,7 @@ scc_data_refresh:
 {% if grains.get('channels') %}
 add_channels:
   cmd.run:
-    - name: mgr-sync add channels {{ ' '.join(grains['channels']) }}
+    - name: mgr-sync add channels {{ ' '.join(grains.get('channels')) }}
     - require:
       - cmd: scc_data_refresh
 
@@ -124,7 +124,7 @@ create_empty_activation_key:
 {% if grains.get('create_sample_bootstrap_script') %}
 create_empty_bootstrap_script:
   cmd.run:
-    - name: rhn-bootstrap --activation-keys=1-DEFAULT --hostname {{ grains['hostname'] }}.{{ grains['domain'] }}
+    - name: rhn-bootstrap --activation-keys=1-DEFAULT --hostname {{ grains.get('hostname') }}.{{ grains.get('domain') }}
     - creates: /srv/www/htdocs/pub/bootstrap/bootstrap.sh
     - require:
       - cmd: create_empty_activation_key

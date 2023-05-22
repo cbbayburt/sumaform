@@ -5,7 +5,7 @@ include:
   {% endif %}
   - server.additional_disk
   - server.firewall
-  {% if grains.get('db_configuration')['local'] %}
+  {% if grains.get('db_configuration:local') %}
   - server.postgres
   {% endif %}
   - server.prometheus
@@ -30,7 +30,7 @@ server-switch-product:
 server_packages:
   pkg.installed:
     - refresh: True
-    {% if grains['osfullname'] == 'Leap' %}
+    {% if grains.get('osfullname') == 'Leap' %}
     - name: patterns-uyuni_server
     {% else %}
     - name: patterns-suma_server
@@ -41,7 +41,7 @@ server_packages:
       {% endif %}
       - sls: server.firewall
 
-{% if 'minion' in grains.get('roles') and grains.get('server') and grains.get('download_private_ssl_key') %}
+{% if grains.get('roles') is not none and 'minion' in grains.get('roles') and grains.get('server') and grains.get('download_private_ssl_key') %}
 
 ssl-build-directory:
   file.directory:
@@ -50,31 +50,31 @@ ssl-build-directory:
 ssl-building-trusted-cert:
   file.managed:
     - name: /root/ssl-build/RHN-ORG-TRUSTED-SSL-CERT
-    - source: http://{{grains['server']}}/pub/RHN-ORG-TRUSTED-SSL-CERT
-    - source_hash: http://{{grains['server']}}/pub/RHN-ORG-TRUSTED-SSL-CERT.sha512
+    - source: http://{{grains.get('server')}}/pub/RHN-ORG-TRUSTED-SSL-CERT
+    - source_hash: http://{{grains.get('server')}}/pub/RHN-ORG-TRUSTED-SSL-CERT.sha512
     - requires:
       - file: ssl-build-directory
 
 ssl-building-private-ssl-key:
   file.managed:
     - name: /root/ssl-build/RHN-ORG-PRIVATE-SSL-KEY
-    - source: http://{{grains['server']}}/pub/RHN-ORG-PRIVATE-SSL-KEY
-    - source_hash: http://{{grains['server']}}/pub/RHN-ORG-PRIVATE-SSL-KEY.sha512
+    - source: http://{{grains.get('server')}}/pub/RHN-ORG-PRIVATE-SSL-KEY
+    - source_hash: http://{{grains.get('server')}}/pub/RHN-ORG-PRIVATE-SSL-KEY.sha512
     - requires:
       - file: ssl-build-directory
 
 ssl-building-ca-configuration:
   file.managed:
     - name: /root/ssl-build/rhn-ca-openssl.cnf
-    - source: http://{{grains['server']}}/pub/rhn-ca-openssl.cnf
-    - source_hash: http://{{grains['server']}}/pub/rhn-ca-openssl.cnf.sha512
+    - source: http://{{grains.get('server')}}/pub/rhn-ca-openssl.cnf
+    - source_hash: http://{{grains.get('server')}}/pub/rhn-ca-openssl.cnf.sha512
     - requires:
       - file: ssl-build-directory
 
 {% endif %}
 
 
-{% if '4' in grains['product_version'] and grains['osfullname'] != 'Leap' and not grains.get('server_registration_code') and 'build_image' not in grains.get('product_version') %}
+{% if grains.get('product_version') is not none and '4' in grains.get('product_version') and grains.get('osfullname') != 'Leap' and not grains.get('server_registration_code') and 'build_image' not in grains.get('product_version') %}
 product_package_installed:
    cmd.run:
      - name: zypper --non-interactive install --auto-agree-with-licenses --force-resolution -t product SUSE-Manager-Server
@@ -86,7 +86,7 @@ environment_setup_script:
     - source: salt://server/setup_env.sh
     - template: jinja
 
-{% if not grains.get('db_configuration')['local'] and grains.get('provider') == 'aws' %}
+{% if not grains.get('db_configuration:local') and grains.get('provider') == 'aws' %}
 aws_db-certificate:
   file.managed:
     - name: /root/aws.crt
@@ -120,7 +120,7 @@ substitute_email_sender_address:
   file.replace:
     - name: /etc/rhn/rhn.conf
     - pattern: web.default_mail_from.*
-    - repl: web.default_mail_from = {{ grains['from_email'] }}
+    - repl: web.default_mail_from = {{ grains.get('from_email') }}
     - require:
         - cmd: server_setup
 {% endif %}
@@ -140,7 +140,7 @@ substitute_email_traceback_address:
   file.replace:
     - name: /etc/rhn/rhn.conf
     - pattern: traceback_mail.*
-    - repl: traceback_mail = {{ grains['traceback_email'] }}
+    - repl: traceback_mail = {{ grains.get('traceback_email') }}
     - require:
         - cmd: server_setup
 {% endif %}
@@ -150,14 +150,14 @@ extend_login_timeout:
   file.replace:
     - name: /etc/rhn/rhn.conf
     - pattern: web.session_database_lifetime.*
-    - repl: web.session_database_lifetime = {{ grains['login_timeout'] }}
+    - repl: web.session_database_lifetime = {{ grains.get('login_timeout') }}
     - append_if_not_found: True
     - require:
         - cmd: server_setup
 {% endif %}
 
 # WORKAROUND: 4.4 is needed only until the branching of SUSE Manager 4.4 is completed
-{% if 'head' in grains.get('product_version') or '4.4' in grains.get('product_version') %}
+{% if grains.get('product_version') is not none and 'head' in grains.get('product_version') or grains.get('product_version') is not none and '4.4' in grains.get('product_version') %}
 change_product_tree_to_beta:
   file.replace:
     - name: /etc/rhn/rhn.conf

@@ -1,9 +1,9 @@
 # WORKAROUND
 # This file should already be excluded from SLE Micro with the 
 # first few lines in salt/default/init.sls
-{% if not grains['osfullname'] == 'SLE Micro' %}
+{% if not grains.get('osfullname') == 'SLE Micro' %}
 include:
-  {% if grains['hostname'] and grains['domain'] %}
+  {% if grains.get('hostname') and grains.get('domain') %}
   - default.hostname
   {% endif %}
   - default.network
@@ -17,16 +17,16 @@ include:
 minimal_package_update:
   pkg.latest:
     - pkgs:
-{% if grains['install_salt_bundle'] %}
+{% if grains.get('install_salt_bundle') %}
       - venv-salt-minion
 {% else %}
       - salt-minion
 {% endif %}
-{% if grains['os_family'] == 'Suse' %}
+{% if grains.get('os_family') == 'Suse' %}
       - zypper
       - libzypp
       # WORKAROUND: avoid a segfault on old versions
-      {% if '12' in grains['osrelease'] %}
+      {% if grains.get('osrelease') is not none and '12' in grains.get('osrelease') %}
       - libgio-2_0-0
       {% endif %}
 {% endif %}

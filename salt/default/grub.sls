@@ -1,9 +1,9 @@
 # HACK
 # Use symlinks to boot SLES 11 SP4
 # That's needed when we patch the kernel on such a system
-{% if grains['osfullname'] == 'SLES' %}
+{% if grains.get('osfullname') == 'SLES' %}
 
-{% if grains['osrelease'] == '11.4' %}
+{% if grains.get('osrelease') == '11.4' %}
 grub_hack:
   file.replace:
     - name: /boot/grub/menu.lst

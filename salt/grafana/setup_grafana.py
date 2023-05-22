@@ -1,4 +1,4 @@
-#!{{grains['pythonexecutable']}}
+#!{{grains.get('pythonexecutable')}}
 
 import base64
 import errno

@@ -7,7 +7,7 @@ certificate_authority_certificate:
     - source: salt://build_host/certs/ca.cert.pem
     - makedirs: True
 
-{% if '11' in grains['osrelease'] %}
+{% if grains.get('osrelease') is not none and '11' in grains.get('osrelease') %}
 
 update_ca_truststore_registry_build_host:
   cmd.run:
@@ -15,7 +15,7 @@ update_ca_truststore_registry_build_host:
     - onchanges:
       - file: certificate_authority_certificate
 
-{% elif '12' in grains['osrelease'] %}
+{% elif grains.get('osrelease') is not none and '12' in grains.get('osrelease') %}
 
 update_ca_truststore_registry_build_host:
   cmd.run:

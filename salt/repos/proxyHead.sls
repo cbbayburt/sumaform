@@ -1,6 +1,6 @@
-{% if 'proxy' in grains.get('roles') %}
+{% if grains.get('roles') is not none and 'proxy' in grains.get('roles') %}
 
-{% if 'head' in grains['product_version'] and not grains.get('proxy_registration_code') %}
+{% if grains.get('product_version') is not none and 'head' in grains.get('product_version') and not grains.get('proxy_registration_code') %}
 proxy_product_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Product-SUSE-Manager-Proxy/4.3/x86_64/product/
@@ -11,7 +11,7 @@ proxy_product_update_repo:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Updates/SLE-Product-SUSE-Manager-Proxy/4.3/x86_64/update/
     - refresh: True
 
-{% if 'beta' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and 'beta' in grains.get('product_version') %}
 proxy_module_pool_repo:
   test.nop: []
 {% else %}
@@ -52,7 +52,7 @@ containers_updates_repo:
 
 {% endif %}
 
-{% if 'head' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and 'head' in grains.get('product_version') %}
 proxy_devel_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de", true) }}/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-Module-SUSE-Manager-Proxy-4.3-POOL-x86_64-Media1/

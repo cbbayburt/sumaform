@@ -1,6 +1,6 @@
-{% if 'build_host' in grains.get('roles') and grains.get('testsuite') | default(false, true) and grains['osfullname'] == 'SLES' and not grains.get('sles_registration_code')%}
+{% if grains.get('roles') is not none and 'build_host' in grains.get('roles') and grains.get('testsuite') | default(false, true) and grains.get('osfullname') == 'SLES' and not grains.get('sles_registration_code')%}
 
-{% if '12' in grains['osrelease'] %}
+{% if grains.get('osrelease') is not none and '12' in grains.get('osrelease') %}
 containers_pool_repo:
   pkgrepo.managed:
     - baseurl: http://{{ grains.get("mirror") | default("download.suse.de/ibs", true) }}/SUSE/Products/SLE-Module-Containers/12/x86_64/product/
@@ -13,19 +13,19 @@ containers_updates_repo:
 
 {% endif %}
 
-{% if '15' in grains['osrelease'] %}
+{% if grains.get('osrelease') is not none and '15' in grains.get('osrelease') %}
 
-{% if grains['osrelease'] == '15' %}
+{% if grains.get('osrelease') == '15' %}
 {% set sle_version_path = '15' %}
-{% elif grains['osrelease'] == '15.1' %}
+{% elif grains.get('osrelease') == '15.1' %}
 {% set sle_version_path = '15-SP1' %}
-{% elif grains['osrelease'] == '15.2' %}
+{% elif grains.get('osrelease') == '15.2' %}
 {% set sle_version_path = '15-SP2' %}
-{% elif grains['osrelease'] == '15.3' %}
+{% elif grains.get('osrelease') == '15.3' %}
 {% set sle_version_path = '15-SP3' %}
-{% elif grains['osrelease'] == '15.4' %}
+{% elif grains.get('osrelease') == '15.4' %}
 {% set sle_version_path = '15-SP4' %}
-{% elif grains['osrelease'] == '15.5' %}
+{% elif grains.get('osrelease') == '15.5' %}
 {% set sle_version_path = '15-SP5' %}
 {% endif %}
 

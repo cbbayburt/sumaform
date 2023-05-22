@@ -1,10 +1,10 @@
-{% if 'jenkins' in grains.get('roles') %}
-  {% if grains['os'] == 'SUSE' %}
-    {% if grains['osfullname'] == 'Leap' %}
-      {% set repo = 'openSUSE_Leap_' + grains['osrelease'] %}
-    {% elif grains['osfullname'] == 'SLES' %}
-      {% set slemajorver = grains['osrelease'].split('.')[0] %}
-      {% set slesp = grains['osrelease'].split('.')[1] %}
+{% if grains.get('roles') is not none and 'jenkins' in grains.get('roles') %}
+  {% if grains.get('os') == 'SUSE' %}
+    {% if grains.get('osfullname') == 'Leap' %}
+      {% set repo = 'openSUSE_Leap_' + grains.get('osrelease') %}
+    {% elif grains.get('osfullname') == 'SLES' %}
+      {% set slemajorver = grains.get('osrelease').split('.')[0] %}
+      {% set slesp = grains.get('osrelease').split('.')[1] %}
       {% if slesp == '0' %}
         {% set slever = 'SLE_' + slemajorver %}
       {% else %}

@@ -14,7 +14,7 @@ client_cucumber_requisites:
     - require:
       - sls: default
 
-{% if grains['os'] == 'SUSE' and '12' in grains['osrelease'] %}
+{% if grains.get('os') == 'SUSE' and grains.get('osrelease') is not none and '12' in grains.get('osrelease') %}
 
 suse_client_cucumber_requisites:
   pkg.installed:

@@ -1,11 +1,11 @@
 {% if grains.get('testsuite') | default(false, true) %}
-{% if 'client' in grains.get('roles') or 'minion' in grains.get('roles') or 'sshminion' in grains.get('roles') %}
+{% if grains.get('roles') is not none and 'client' in grains.get('roles') or grains.get('roles') is not none and 'minion' in grains.get('roles') or grains.get('roles') is not none and 'sshminion' in grains.get('roles') %}
 
 include:
   - scc
   - repos
 
-{% if grains['os'] == 'SUSE' %}
+{% if grains.get('os') == 'SUSE' %}
 
 default_cucumber_requisites:
   pkg.installed:
@@ -16,7 +16,7 @@ default_cucumber_requisites:
     - require:
       - sls: repos
 
-{% elif grains['os_family'] == 'RedHat' %}
+{% elif grains.get('os_family') == 'RedHat' %}
 
 default_cucumber_requisites:
   pkg.installed:

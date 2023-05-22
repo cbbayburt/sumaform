@@ -46,7 +46,7 @@ locustfile:
   file.decode:
     - name: /root/locustfile.py
     - encoding_type: base64
-    - encoded_data: {{ grains['locust_file'] }}
+    - encoded_data: {{ grains.get('locust_file') }}
 
 locust_service:
   file.managed:
@@ -58,16 +58,16 @@ locust_service:
         [Service]
         Environment=SERVER_USERNAME={{ grains.get('server_username') | default('admin', true) }}
         Environment=SERVER_PASSWORD={{ grains.get('server_password') | default('admin', true) }}
-        ExecStart=/usr/bin/locust --host=https://{{ grains['server'] }} \
+        ExecStart=/usr/bin/locust --host=https://{{ grains.get('server') }} \
                                   --locustfile=/root/locustfile.py \
                                   --logfile=/var/log/locust.log \
-                                  {% if not grains['locust_master_host'] and grains['locust_slave_count'] > 0 -%}
+                                  {% if not grains.get('locust_master_host') and grains.get('locust_slave_count') > 0 -%}
                                   --master \
-                                  --expect-slaves={{ grains['locust_slave_count'] }} \
+                                  --expect-slaves={{ grains.get('locust_slave_count') }} \
                                   --port 80
-                                  {% elif grains['locust_master_host'] -%}
+                                  {% elif grains.get('locust_master_host') -%}
                                   --slave \
-                                  --master-host={{ grains['locust_master_host'] }} \
+                                  --master-host={{ grains.get('locust_master_host') }} \
                                   {% else -%}
                                   --port 80
                                   {% endif %}

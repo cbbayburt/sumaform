@@ -1,4 +1,4 @@
-{% if grains.get('ipv6')['enable'] %}
+{% if grains.get('ipv6:enable') %}
 
 ipv6_enable_all:
   sysctl.present:
@@ -8,7 +8,7 @@ ipv6_enable_all:
 {# net.ipv6.conf.all.accept_ra cannot be used, we have to proceed one interface at a time #}
 {% set ifaces = grains.get('ip6_interfaces').keys() %}
 
-{% if grains.get('ipv6')['accept_ra'] %}
+{% if grains.get('ipv6:accept_ra') %}
 
 {% for iface in ifaces %}
 ipv6_accept_ra_{{ iface }}:
@@ -32,7 +32,7 @@ delete_existing_dynamic_addresses_{{ iface }}:
           ip -6 a d $dynaddr dev {{ iface }}
         done
 
-{% if grains['os'] == 'SUSE' %}
+{% if grains.get('os') == 'SUSE' %}
 avoid_wicked_messing_up_{{ iface }}:
   file.replace:
     - name: /etc/sysconfig/network/ifcfg-{{ iface }}
@@ -42,7 +42,7 @@ avoid_wicked_messing_up_{{ iface }}:
 {% endif %}
 {% endfor %}
 
-{% if grains['os'] == 'Ubuntu' %}
+{% if grains.get('os') == 'Ubuntu' %}
 avoid_networkd_messing_up:
   file.append:
     - name: /etc/netplan/01-netcfg.yaml
@@ -62,7 +62,7 @@ ipv6_disable_all:
 
 {% endif %}
 
-{% if grains['os_family'] == 'RedHat' and grains.get('osmajorrelease', None)|int() == 6 %}
+{% if grains.get('os_family') == 'RedHat' and grains.get('osmajorrelease', None)|int() == 6 %}
 mdns_iptables:
   iptables.insert:
     - position: 1
@@ -76,7 +76,7 @@ mdns_iptables:
     - save: True
 {% endif %}
 
-{% if grains['os'] == 'Debian' %}
+{% if grains.get('os') == 'Debian' %}
 comment_hosts_fqdn:
   file.replace:
     - name: /etc/hosts

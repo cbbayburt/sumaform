@@ -1,6 +1,6 @@
-{% if 'server' in grains.get('roles') and grains.get('server_registration_code') %}
+{% if grains.get('roles') is not none and 'server' in grains.get('roles') and grains.get('server_registration_code') %}
 
-{% if '4.1' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.1' in grains.get('product_version') %}
 register_suse_manager_server_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("server_registration_code") }} -p SUSE-Manager-Server/4.1/x86_64
@@ -22,7 +22,7 @@ add_sle_module_suse_manager_server:
 {% endif %}
 
 
-{% if '4.2' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.2' in grains.get('product_version') %}
 register_suse_manager_server_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("server_registration_code") }} -p SUSE-Manager-Server/4.2/x86_64
@@ -44,7 +44,7 @@ add_sle_module_suse_manager_server:
 
 {% endif %}
 
-{% if '4.3' in grains['product_version'] %}
+{% if grains.get('product_version') is not none and '4.3' in grains.get('product_version') %}
 register_suse_manager_server_with_scc:
    cmd.run:
      - name: SUSEConnect --url https://scc.suse.com -r {{ grains.get("server_registration_code") }} -p SUSE-Manager-Server/4.3/x86_64

@@ -1,9 +1,9 @@
-{% if grains['additional_repos'] %}
-{% for label, url in grains['additional_repos'].items() %}
+{% if grains.get('additional_repos') %}
+{% for label, url in grains.get('additional_repos').items() %}
 {{ label }}_repo:
   pkgrepo.managed:
     - humanname: {{ label }}_repo
-  {%- if grains['os_family'] == 'Debian' %}
+  {%- if grains.get('os_family') == 'Debian' %}
   {%- if 'uyuni-pr' in grains.get('product_version', '') %}
     - name: deb [trusted=yes] {{ url }} /
     - file: /etc/apt/sources.list.d/sumaform_additional_repos.list
@@ -22,7 +22,7 @@
 # WORKAROUND: to have additional_repos have priority over normal tools we hardcode the hostname originating them (in the future we may want to add an
 # input variable to match against origin or release file fields
 # Ref: https://wiki.debian.org/AptPreferences
-{% if grains['os_family'] == 'Debian' and grains['os'] == 'Ubuntu' %}
+{% if grains.get('os_family') == 'Debian' and grains.get('os') == 'Ubuntu' %}
 {{ label }}_customrepo_raised_priority:
   file.append:
     - name: /etc/apt/preferences.d/sumaform_additional_repos
@@ -38,15 +38,15 @@
 {% endfor %}
 {% endif %}
 
-{% if grains['additional_certs'] %}
-{% for label, url in grains['additional_certs'].items() %}
+{% if grains.get('additional_certs') %}
+{% for label, url in grains.get('additional_certs').items() %}
 {{ label }}_cert:
   file.managed:
     - name: /etc/pki/trust/anchors/{{ label }}
     - source: {{ url }}
     - source_hash: {{ url }}.sha512
 
-{% if grains['os'] == 'SUSE' %}
+{% if grains.get('os') == 'SUSE' %}
 update-ca-certificates:
   cmd.run:
     - name: /usr/sbin/update-ca-certificates

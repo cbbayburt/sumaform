@@ -1,4 +1,4 @@
-RHN_PARENT={{grains['server']}}
+RHN_PARENT={{grains.get('server')}}
 HTTP_PROXY=''
 TRACEBACK_EMAIL=''
 USE_SSL=Y/n
@@ -6,7 +6,7 @@ USE_EXISTING_CERTS=y/N
 INSTALL_MONITORING=n
 SSL_ORG=SUSE
 SSL_ORGUNIT=SUSE
-SSL_COMMON={{grains['hostname']}}.{{grains['domain']}}
+SSL_COMMON={{grains.get('hostname')}}.{{grains.get('domain')}}
 SSL_CITY=Nuremberg
 SSL_STATE=Bayern
 SSL_COUNTRY=DE

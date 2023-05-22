@@ -1,6 +1,6 @@
 include:
   - default.locale
-  {% if not grains['osfullname'] == 'SLE Micro' %}
+  {% if not grains.get('osfullname') == 'SLE Micro' %}
   # Dependencies already satisfied by the images
   # https://build.opensuse.org/project/show/systemsmanagement:sumaform:images:microos
   - default.minimal
@@ -11,7 +11,7 @@ include:
   {% if grains.get('reset_ids') | default(false, true) %}
   - default.ids
   {% endif %}
-  {% if not grains['osfullname'] == 'SLE Micro' %}
+  {% if not grains.get('osfullname') == 'SLE Micro' %}
   # Dependencies already satisfied by the images
   # https://build.opensuse.org/project/show/systemsmanagement:sumaform:images:microos
   - default.testsuite
@@ -28,7 +28,7 @@ update_packages:
 file_swap:
   cmd.run:
     - name: |
-        {% if grains['os_family'] == 'RedHat' %}dd if=/dev/zero of=/extra_swapfile bs=1048576 count={{grains['swap_file_size']}}{% else %}fallocate --length {{grains['swap_file_size']}}MiB /extra_swapfile{% endif %}
+        {% if grains.get('os_family') == 'RedHat' %}dd if=/dev/zero of=/extra_swapfile bs=1048576 count={{grains.get('swap_file_size')}}{% else %}fallocate --length {{grains.get('swap_file_size')}}MiB /extra_swapfile{% endif %}
         chmod 0600 /extra_swapfile
         mkswap /extra_swapfile
     - creates: /extra_swapfile
@@ -39,12 +39,12 @@ file_swap:
       - cmd: file_swap
 {% endif %}
 
-{% if grains['authorized_keys'] %}
+{% if grains.get('authorized_keys') %}
 authorized_keys:
   file.append:
     - name: /root/.ssh/authorized_keys
     - text:
-{% for key in grains['authorized_keys'] %}
+{% for key in grains.get('authorized_keys') %}
       - {{ key }}
 {% endfor %}
     - makedirs: True

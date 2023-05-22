@@ -1,10 +1,10 @@
 {% if grains.get('testsuite') | default(false, true) %}
-{% if 'client' in grains.get('roles') or 'minion' in grains.get('roles') or 'sshminion' in grains.get('roles') %}
+{% if grains.get('roles') is not none and 'client' in grains.get('roles') or grains.get('roles') is not none and 'minion' in grains.get('roles') or grains.get('roles') is not none and 'sshminion' in grains.get('roles') %}
 
-{% if (grains['os'] == 'SUSE') or (grains['os_family'] == 'RedHat') %}
+{% if (grains.get('os') == 'SUSE') or (grains.get('os_family') == 'RedHat') %}
 
 uyuni_key_for_fake_packages:
-{% if not grains['osfullname'] == 'SLE Micro' %}
+{% if not grains.get('osfullname') == 'SLE Micro' %}
   file.managed:
     - name: /tmp/uyuni.key
     - source: salt://default/gpg_keys/uyuni.key
@@ -24,7 +24,7 @@ test_repo_rpm_pool:
     - gpgcheck: 1
     - gpgkey: http://{{ grains.get("mirror") | default("downloadcontent.opensuse.org", true) }}/repositories/systemsmanagement:/Uyuni:/Test-Packages:/Pool/rpm/repodata/repomd.xml.key
 
-{% elif grains['os_family'] == 'Debian' %}
+{% elif grains.get('os_family') == 'Debian' %}
 
 test_repo_deb_pool:
   pkgrepo.managed:
