@@ -11,6 +11,7 @@ else
     echo "Error: Cannot find venv-salt-call or salt-call on the system"
     exit 1
 fi
+SALT_CALL=salt-call
 
 # Nothing to do in case "install_salt_bundle" grain is not true
 INSTALL_SALT_BUNDLE=$(${SALT_CALL} --local --log-level=quiet --output=txt grains.get install_salt_bundle)

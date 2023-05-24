@@ -11,5 +11,6 @@ else
     echo "Error: Cannot find venv-salt-call or salt-call on the system"
     exit 1
 fi
+SALT_CALL=salt-call
 
 ${SALT_CALL} --local --file-root=$FILE_ROOT/ --log-level=info --retcode-passthrough --force-color state.highstate

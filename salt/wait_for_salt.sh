@@ -31,6 +31,7 @@ else
     echo "Error: Cannot find venv-salt-call or salt-call on the system"
     exit 1
 fi
+SALT_CALL=salt-call
 
 for i in {0..100}
 do

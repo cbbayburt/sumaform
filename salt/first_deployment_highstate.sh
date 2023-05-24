@@ -19,6 +19,7 @@ else
     echo "Error: Cannot find venv-salt-call or salt-call on the system"
     exit 1
 fi
+SALT_CALL=salt-call
 
 echo "starting first call to update salt and do minimal configuration"
 
