@@ -2,8 +2,6 @@
 locals {
   images_used = var.use_shared_resources ? [] : var.images
   image_urls = {
-    almalinux8o              = "${var.use_mirror_images ? "http://${var.mirror}" : "https://repo.almalinux.org"}/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
-    almalinux9o              = "${var.use_mirror_images ? "http://${var.mirror}" : "https://repo.almalinux.org"}/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
     amazonlinux2o            = "${var.use_mirror_images ? "http://${var.mirror}" : "https://cdn.amazonlinux.com"}/os-images/2.0.20210721.2/kvm/amzn2-kvm-2.0.20210721.2-x86_64.xfs.gpt.qcow2"
     centos7                  = "${var.use_mirror_images ? "http://${var.mirror}" : "https://github.com"}/uyuni-project/sumaform-images/releases/download/4.3.0/centos7.qcow2"
     centos7o                 = "${var.use_mirror_images ? "http://${var.mirror}" : "https://cloud.centos.org"}/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2"
