@@ -28,9 +28,9 @@ jobs:
 
         echo "EOF" >> $GITHUB_ENV
     - name: Comment on the pull request
-      if: env.IMAGE_LIST
       uses: actions-cool/maintain-one-comment@v3
       with:
+        delete: ${{ !env.IMAGE_LIST }}
         body: |
           This pull request updates the URLs of the following images:
           ${{ env.IMAGE_LIST }}
