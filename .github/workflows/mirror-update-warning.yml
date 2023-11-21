@@ -2,8 +2,8 @@ name: Mirror update notification
 
 on:
   pull_request:
-    branches:
-      - master
+#   branches:
+#     - master
     paths:
       - backend_modules/libvirt/base/main.tf
 
