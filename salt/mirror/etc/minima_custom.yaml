@@ -1,0 +1,446 @@
+storage:
+  type: file
+  path: /srv/mirror
+
+scc:
+  username: SCC_ORG_EDCFDA
+  password: c0d89b4ed6
+  repo_names:
+    # required by testsuite
+    #- SLES11-SP1-Pool
+    #- SLES11-SP1-Updates
+    #- SLES11-SP1-SUSE-Manager-Tools
+    #- SLE11-SDK-SP1-Pool
+    #- SLE11-SDK-SP1-Updates
+    #- SUSE-Manager-Proxy-2.1-Pool
+    #- SUSE-Manager-Proxy-2.1-Updates
+    #- SLES11-SP3-Pool
+    #- SLES11-SP3-Updates
+
+    # Required for SLED testing
+    #- SLE-15-GA-Desktop-NVIDIA-Driver
+    #- SLE-15-SP1-Desktop-NVIDIA-Driver
+    #- SLE-15-SP2-Desktop-NVIDIA-Driver
+
+    # SLES
+    #- SLES11-SP4-Pool
+    #- SLES11-SP4-Updates
+    #- SLES12-SP3-Pool
+    #- SLES12-SP3-Updates
+    #- SLES12-SP3-LTSS-Updates
+    #- SLES12-SP4-Pool
+    #- SLES12-SP4-Updates
+    #- SLES12-SP4-LTSS-Updates
+    #- SLES12-SP5-Pool
+    #- SLES12-SP5-Updates
+    # uncomment when it goes LTSS
+    # - SLES12-SP5-LTSS-Updates
+    # SLE 15 Products
+    #- SLE-Product-SLES15-Pool
+    #- SLE-Product-SLES15-Updates
+    #- SLE-Product-SLES15-LTSS-Updates
+    #- SLE-Product-SLES_SAP15-Pool
+    #- SLE-Product-SLES_SAP15-Updates
+    #- SLE-Product-SLED15-Pool
+    #- SLE-Product-SLED15-Updates
+    # SLE 15 Basic Modules
+    #- SLE-Module-Basesystem15-Pool
+    #- SLE-Module-Basesystem15-Updates
+    #- SLE-Module-Server-Applications15-Pool
+    #- SLE-Module-Server-Applications15-Updates
+    #- SLE-Module-Desktop-Applications15-Pool
+    #- SLE-Module-Desktop-Applications15-Updates
+    #- SLE-Product-WE15-Pool
+    #- SLE-Product-WE15-Updates
+    # SLE 15-SP1 Products
+    #- SLE-Product-SLES15-SP1-Pool
+    #- SLE-Product-SLES15-SP1-Updates
+    #- SLE-Product-SLES15-SP1-LTSS-Updates
+    # SLE 15-SP1 Basic Modules
+    #- SLE-Module-Basesystem15-SP1-Pool
+    #- SLE-Module-Basesystem15-SP1-Updates
+    #- SLE-Module-Server-Applications15-SP1-Pool
+    #- SLE-Module-Server-Applications15-SP1-Updates
+    #- SLE-Module-Web-Scripting15-SP1-Pool
+    #- SLE-Module-Web-Scripting15-SP1-Updates
+    #- SLE-Module-Desktop-Applications15-SP1-Pool
+    #- SLE-Module-Desktop-Applications15-SP1-Updates
+    #- SLE-Module-DevTools15-SP1-Pool
+    #- SLE-Module-DevTools15-SP1-Updates
+    #- SLE-Module-Python2-15-SP1-Pool
+    #- SLE-Module-Python2-15-SP1-Update
+    # SLE 15-SP2 Products
+    #- SLE-Product-SLES15-SP2-Pool
+    #- SLE-Product-SLES15-SP2-Updates
+    # uncomment when it goes LTSS
+    #- SLE-Product-SLES15-SP2-LTSS-Updates
+    #- SLE-Product-SLED15-SP2-Pool
+    #- SLE-Product-SLED15-SP2-Updates
+    # SLE 15-SP2 Basic Modules
+    #- SLE-Module-Basesystem15-SP2-Pool
+    #- SLE-Module-Basesystem15-SP2-Updates
+    #- SLE-Module-Server-Applications15-SP2-Pool
+    #- SLE-Module-Server-Applications15-SP2-Updates
+    #- SLE-Module-Web-Scripting15-SP2-Pool
+    #- SLE-Module-Web-Scripting15-SP2-Updates
+    #- SLE-Module-Desktop-Applications15-SP2-Pool
+    #- SLE-Module-Desktop-Applications15-SP2-Updates
+    #- SLE-Module-DevTools15-SP2-Pool
+    #- SLE-Module-DevTools15-SP2-Updates
+    #- SLE-Module-Python2-15-SP2-Pool
+    #- SLE-Module-Python2-15-SP2-Update
+    # SLE 15-SP3 Products
+    #- SLE-Product-SLES15-SP3-Pool
+    #- SLE-Product-SLES15-SP3-Updates
+    # uncomment when it goes LTSS
+    #- SLE-Product-SLES15-SP3-LTSS-Updates
+    # SLE 15-SP3 Basic Modules
+    #- SLE-Module-Basesystem15-SP3-Pool
+    #- SLE-Module-Basesystem15-SP3-Updates
+    #- SLE-Module-Server-Applications15-SP3-Pool
+    #- SLE-Module-Server-Applications15-SP3-Updates
+    #- SLE-Module-Web-Scripting15-SP3-Pool
+    #- SLE-Module-Web-Scripting15-SP3-Updates
+    #- SLE-Module-Desktop-Applications15-SP3-Pool
+    #- SLE-Module-Desktop-Applications15-SP3-Updates
+    #- SLE-Module-DevTools15-SP3-Pool
+    #- SLE-Module-DevTools15-SP3-Updates
+    #- SLE-Module-Python2-15-SP3-Pool
+    #- SLE-Module-Python2-15-SP3-Update
+    # SLE Micro
+    #- SLE-Micro-5.2-Pool
+    #- SLE-Micro-5.2-Updates
+    #- SLE-Micro-5.3-Pool
+    #- SLE-Micro-5.3-Updates
+    #- SLE-Micro-5.4-Pool
+    #- SLE-Micro-5.4-Updates
+    # SLE 15-SP4 Products
+    - SLE-Product-SLES15-SP4-Pool
+    - SLE-Product-SLES15-SP4-Updates
+    # SLE 15-SP4 Basic Modules
+    - SLE-Module-Basesystem15-SP4-Pool
+    - SLE-Module-Basesystem15-SP4-Updates
+    - SLE-Module-Server-Applications15-SP4-Pool
+    - SLE-Module-Server-Applications15-SP4-Updates
+    - SLE-Module-Web-Scripting15-SP4-Pool
+    - SLE-Module-Web-Scripting15-SP4-Updates
+    - SLE-Module-Desktop-Applications15-SP4-Pool
+    - SLE-Module-Desktop-Applications15-SP4-Updates
+    - SLE-Module-DevTools15-SP4-Pool
+    - SLE-Module-DevTools15-SP4-Updates
+    # SLE 15-SP5 Products
+    - SLE-Product-SLES15-SP5-Pool
+    - SLE-Product-SLES15-SP5-Updates
+    # SLE 15-SP5 Basic Modules
+    - SLE-Module-Basesystem15-SP5-Pool
+    - SLE-Module-Basesystem15-SP5-Updates
+    - SLE-Module-Server-Applications15-SP5-Pool
+    - SLE-Module-Server-Applications15-SP5-Updates
+    - SLE-Module-Web-Scripting15-SP5-Pool
+    - SLE-Module-Web-Scripting15-SP5-Updates
+    - SLE-Module-Desktop-Applications15-SP5-Pool
+    - SLE-Module-Desktop-Applications15-SP5-Updates
+    - SLE-Module-Python3-15-SP5-Pool
+    - SLE-Module-Python3-15-SP5-Updates
+    - SLE-Module-DevTools15-SP5-Pool
+    - SLE-Module-DevTools15-SP5-Updates
+    - SLE15-SP5-Installer-Updates
+    # SLE Legacy Module
+    #- SLE-Module-Legacy12-Pool
+    #- SLE-Module-Legacy12-Updates
+    # SLE Container Module
+    #- SLE-Module-Containers12-Pool
+    #- SLE-Module-Containers12-Updates
+    #- SLE-Module-Containers15-Pool
+    #- SLE-Module-Containers15-Updates
+    #- SLE-Module-Containers15-SP1-Pool
+    #- SLE-Module-Containers15-SP1-Updates
+    #- SLE-Module-Containers15-SP2-Pool
+    #- SLE-Module-Containers15-SP2-Updates
+    #- SLE-Module-Containers15-SP3-Pool
+    #- SLE-Module-Containers15-SP3-Updates
+    - SLE-Module-Containers15-SP4-Pool
+    - SLE-Module-Containers15-SP4-Updates
+    - SLE-Module-Containers15-SP5-Pool
+    - SLE-Module-Containers15-SP5-Updates
+    # SUSE Manager Server
+    #- SLE-Product-SUSE-Manager-Server-4.1-Pool
+    #- SLE-Product-SUSE-Manager-Server-4.1-Updates
+    #- SLE-Module-SUSE-Manager-Server-4.1-Pool
+    #- SLE-Module-SUSE-Manager-Server-4.1-Updates
+    #- SLE-Product-SUSE-Manager-Server-4.2-Pool
+    #- SLE-Product-SUSE-Manager-Server-4.2-Updates
+    #- SLE-Module-SUSE-Manager-Server-4.2-Pool
+    #- SLE-Module-SUSE-Manager-Server-4.2-Updates
+    - SLE-Product-SUSE-Manager-Server-4.3-Pool
+    - SLE-Product-SUSE-Manager-Server-4.3-Updates
+    - SLE-Module-SUSE-Manager-Server-4.3-Pool
+    - SLE-Module-SUSE-Manager-Server-4.3-Updates
+    # SUSE Manager Proxy
+    #- SLE-Product-SUSE-Manager-Proxy-4.1-Pool
+    #- SLE-Product-SUSE-Manager-Proxy-4.1-Updates
+    #- SLE-Module-SUSE-Manager-Proxy-4.1-Pool
+    #- SLE-Module-SUSE-Manager-Proxy-4.1-Updates
+    #- SLE-Product-SUSE-Manager-Proxy-4.2-Pool
+    #- SLE-Product-SUSE-Manager-Proxy-4.2-Updates
+    #- SLE-Module-SUSE-Manager-Proxy-4.2-Pool
+    #- SLE-Module-SUSE-Manager-Proxy-4.2-Updates
+    - SLE-Product-SUSE-Manager-Proxy-4.3-Pool
+    - SLE-Product-SUSE-Manager-Proxy-4.3-Updates
+    - SLE-Module-SUSE-Manager-Proxy-4.3-Pool
+    - SLE-Module-SUSE-Manager-Proxy-4.3-Updates
+    # Retail Branch Server
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.1-Pool
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.1-Updates
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.1-Pool
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.1-Updates
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.2-Pool
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.2-Updates
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.2-Pool
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.2-Updates
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.3-Pool
+    #- SLE-Product-SUSE-Manager-Retail-Branch-Server-4.3-Updates
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.3-Pool
+    #- SLE-Module-SUSE-Manager-Retail-Branch-Server-4.3-Updates
+    # SUSE Manager Tools
+    - SLE-Manager-Tools12-Pool
+    - SLE-Manager-Tools12-Updates
+    - SLE-Manager-Tools15-Pool
+    - SLE-Manager-Tools15-Updates
+    - RES-7-SUSE-Manager-Tools
+    - RES8-Manager-Tools-Pool
+    - RES8-Manager-Tools-Updates
+    - EL9-Manager-Tools-Pool
+    - EL9-Manager-Tools-Updates
+    #- Ubuntu-18.04-SUSE-Manager-Tools
+    #- Ubuntu-20.04-SUSE-Manager-Tools
+    - Ubuntu-22.04-SUSE-Manager-Tools
+    # SUSE Manager Beta Tools
+    - SLE-Manager-Tools12-Pool-Beta
+    - SLE-Manager-Tools12-Updates-Beta
+    - SLE-Manager-Tools15-Pool-Beta
+    - SLE-Manager-Tools15-Updates-Beta
+    - RES-7-SUSE-Manager-Tools-Beta
+    - RES8-Manager-Tools-Pool-Beta
+    - RES8-Manager-Tools-Updates-Beta
+    #- Ubuntu-18.04-SUSE-Manager-Tools-Beta
+    #- Ubuntu-20.04-SUSE-Manager-Tools-Beta
+    - Ubuntu-22.04-SUSE-Manager-Tools-Beta
+    # Liberty Linux
+    - EL9-Pool
+    - SLL-9-Updates
+    - SLL-AS-9-Updates
+    - SLL-CB-9-Updates
+  archs: [x86_64, amd64]
+
+http:
+
+  # SUSE Manager Head
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-Module-SUSE-Manager-Server-4.3-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/ToSLE/SLE_15_SP4/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-Module-SUSE-Manager-Testing-Overlay-4.3-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-Module-SUSE-Manager-Proxy-4.3-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/ToSLE/SLE_15_SP4/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-Module-SUSE-Manager-Testing-Overlay-4.3-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/SLE12-SUSE-Manager-Tools/images/repo/SLE-12-Manager-Tools-Beta-POOL-x86_64-Media1
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/SLE15-SUSE-Manager-Tools/images/repo/SLE-15-Manager-Tools-POOL-x86_64-Media1
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/RES7-SUSE-Manager-Tools/SUSE_RES-7_Update_standard
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/RES8-SUSE-Manager-Tools/SUSE_RES-8_Update_standard
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/EL9-SUSE-Manager-Tools/SUSE_EL-9_Update_standard
+    archs: [x86_64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/Ubuntu18.04-SUSE-Manager-Tools/xUbuntu_18.04
+    archs: [amd64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/Ubuntu20.04-SUSE-Manager-Tools/xUbuntu_20.04
+    archs: [amd64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/Ubuntu22.04-SUSE-Manager-Tools/xUbuntu_22.04
+    archs: [amd64]
+  - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head:/Debian10-SUSE-Manager-Tools/Debian_10
+    archs: [amd64]
+
+  # SUSE Manager 4.3 devel
+# - url: http://download.suse.de/ibs/SUSE:/SLE-15-SP4:/Update:/Products:/Manager43/images/repo/SLE-Module-SUSE-Manager-Server-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3/images/repo/SLE-Module-SUSE-Manager-Server-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/ToSLE/SLE_15_SP4/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3/images/repo/SLE-Module-SUSE-Manager-Testing-Overlay-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/SUSE:/SLE-15-SP4:/Update:/Products:/Manager43/images/repo/SLE-Module-SUSE-Manager-Proxy-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3/images/repo/SLE-Module-SUSE-Manager-Proxy-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/ToSLE/SLE_15_SP4/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3/images/repo/SLE-Module-SUSE-Manager-Testing-Overlay-4.3-POOL-x86_64-Media1/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/SLE12-SUSE-Manager-Tools/SLE_12/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/SLE15-SUSE-Manager-Tools/SLE_15/
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/RES7-SUSE-Manager-Tools/SUSE_RES-7_Update_standard
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/RES8-SUSE-Manager-Tools/SUSE_RES-8_Update_standard
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/EL9-SUSE-Manager-Tools/SUSE_EL-9_Update_standard
+#   archs: [x86_64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/Ubuntu18.04-SUSE-Manager-Tools/xUbuntu_18.04
+#   archs: [amd64]
+# - url: http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/Ubuntu20.04-SUSE-Manager-Tools/xUbuntu_20.04/
+#   archs: [amd64]
+# - url: https://download.suse.de/ibs/Devel:/Galaxy:/Manager:/4.3:/Ubuntu22.04-SUSE-Manager-Tools/xUbuntu_22.04/
+#   archs: [amd64]
+# - url: https://download.suse.de/download/ibs/Devel:/Galaxy:/Manager:/4.3:/Debian10-SUSE-Manager-Tools/Debian_10/
+#   archs: [amd64]
+# - url: https://download.suse.de/download/ibs/Devel:/Galaxy:/Manager:/4.3:/Debian11-SUSE-Manager-Tools/Debian_11/
+#   archs: [amd64]
+
+
+# # AlmaLinux 8
+# - url: https://ftp.fau.de/almalinux/8/BaseOS/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/almalinux/8/AppStream/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/almalinux/8/extras/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/almalinux/8/PowerTools/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/almalinux/8/HighAvailability/x86_64/os/
+#   archs: [x86_64, i686]
+
+  # AlmaLinux 9
+  - url: https://ftp.fau.de/almalinux/9.4/BaseOS/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/almalinux/9.4/AppStream/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/almalinux/9.4/extras/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/almalinux/9.4/HighAvailability/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/almalinux/9.4/CRB/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/almalinux/9.4/plus/x86_64/os/
+    archs: [x86_64]
+
+  # Rocky Linux 8
+  - url: https://ftp.fau.de/rockylinux/8/BaseOS/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/rockylinux/8/AppStream/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/rockylinux/8/extras/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/rockylinux/8/PowerTools/x86_64/os/
+    archs: [x86_64]
+  - url: https://ftp.fau.de/rockylinux/8/HighAvailability/x86_64/os/
+    archs: [x86_64]
+
+# # Rocky Linux 9
+# - url: https://ftp.fau.de/rockylinux/9.4/BaseOS/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/rockylinux/9.4/AppStream/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/rockylinux/9.4/extras/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/rockylinux/9.4/HighAvailability/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/rockylinux/9.4/CRB/x86_64/os/
+#   archs: [x86_64, i686]
+# - url: https://ftp.fau.de/rockylinux/9.4/plus/x86_64/os/
+#   archs: [x86_64, i686]
+
+  # Avahi
+  - url: https://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.8/15.4/
+    archs: [x86_64]
+
+  # openSUSE Leap
+# - url: http://download.opensuse.org/distribution/leap/15.5/repo/oss/
+#   archs: [x86_64]
+# - url: http://download.opensuse.org/update/leap/15.5/oss/
+#   archs: [x86_64]
+# - url: http://download.opensuse.org/update/leap/15.5/sle/
+#   archs: [x86_64]
+# - url: http://download.opensuse.org/update/leap/15.5/backports/
+#   archs: [x86_64]
+
+  # Uyuni Master
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master/openSUSE_Leap_15.5/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master/images/repo/Testing-Overlay-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master/images/repo/Uyuni-Server-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master/images/repo/Uyuni-Proxy-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/SLE12-Uyuni-Client-Tools/SLE_12/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/SLE15-Uyuni-Client-Tools/SLE_15/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/CentOS7-Uyuni-Client-Tools/CentOS_7/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/CentOS8-Uyuni-Client-Tools/CentOS_8/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/EL8-Uyuni-Client-Tools/EL_8/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/EL9-Uyuni-Client-Tools/EL_9/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/Ubuntu1804-Uyuni-Client-Tools/xUbuntu_18.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/Ubuntu2004-Uyuni-Client-Tools/xUbuntu_20.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/Ubuntu2204-Uyuni-Client-Tools/xUbuntu_22.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/Debian10-Uyuni-Client-Tools/Debian_10/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Master:/Debian11-Uyuni-Client-Tools/Debian_11/
+    archs: [x86_64]
+
+  # Uyuni Stable
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable/openSUSE_Leap_15.5/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable/images/repo/Uyuni-Server-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable/images/repo/Uyuni-Proxy-POOL-x86_64-Media1/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/SLE12-Uyuni-Client-Tools/SLE_12/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/SLE15-Uyuni-Client-Tools/SLE_15/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/openSUSE_Leap_15-Uyuni-Client-Tools/openSUSE_Leap_15.0/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/CentOS7-Uyuni-Client-Tools/CentOS_7/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/CentOS8-Uyuni-Client-Tools/CentOS_8/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/EL8-Uyuni-Client-Tools/EL_8/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/EL9-Uyuni-Client-Tools/EL_9/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/Ubuntu1804-Uyuni-Client-Tools/xUbuntu_18.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/Ubuntu2004-Uyuni-Client-Tools/xUbuntu_20.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/Ubuntu2204-Uyuni-Client-Tools/xUbuntu_22.04/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/Debian10-Uyuni-Client-Tools/Debian_10/
+    archs: [x86_64]
+  - url: http://download.opensuse.org/repositories/systemsmanagement:/Uyuni:/Stable:/Debian11-Uyuni-Client-Tools/Debian_11/
+    archs: [x86_64]
+
+  # Home project
+  - url: http://download.opensuse.org/repositories/home:/cbbayburt:/Uyuni:/Utils/15.4/
+    archs: [x86_64]
+
+  # TODO
+  #  - Test SUMA & Uyuni
