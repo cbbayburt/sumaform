@@ -358,9 +358,9 @@ http:
 # - url: https://ftp.fau.de/rockylinux/9.4/plus/x86_64/os/
 #   archs: [x86_64, i686]
 
-  # Avahi
-  - url: https://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.8/15.4/
-    archs: [x86_64]
+# # Avahi
+# - url: https://download.opensuse.org/repositories/systemsmanagement:/sumaform:/tools:/avahi:/0.8/15.4/
+#   archs: [x86_64]
 
   # openSUSE Leap
 # - url: http://download.opensuse.org/distribution/leap/15.5/repo/oss/
